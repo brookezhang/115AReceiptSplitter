@@ -8,39 +8,37 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var usedWords = [String]()
-    @State private var rootWord = ""
-    @State private var newWord = ""
-    
+    @State var text: String = ""
+    @State var namesList = [String]()
     var body: some View {
-        NavigationView {
-                List {
-                    Section {
-                        TextField("Enter your word", text: $newWord)
-                    }
-
-                    Section {
-                        ForEach(usedWords, id: \.self) { word in
-                            Text(word)
-                        }
+        NavigationView{
+            List{
+                Section(header: Text("Enter New Name Below")){
+                    HStack{
+                        TextField("Peter Parker", text: $text)
+                        Button(action: {
+                            if !text.isEmpty{
+                                namesList.insert(text, at:0)
+                                text = ""
+                            }
+                        }, label:{
+                                Text("Add")
+                        })
                     }
                 }
-                .navigationTitle(rootWord)
-                .onSubmit(addNewWord)
-            }
+                Section{
+                    ForEach(namesList, id:\.self) {item in
+                        VStack(alignment: .leading){
+                            Text(item).font(.headline)
+                        }
+                    }.onDelete(perform:{
+                        indexSet in namesList.remove(atOffsets:indexSet)
+                    })
+                }
+            }.navigationTitle("Add Names")
+        }
     }
-    func addNewWord() {
-        // lowercase and trim the word, to make sure we don't add duplicate words with case differences
-        let answer = newWord
 
-        // exit if the remaining string is empty
-        guard answer.count > 0 else { return }
-
-        // extra validation to come
-
-        usedWords.insert(answer, at: 0)
-        newWord = ""
-    }
 }
 
 
