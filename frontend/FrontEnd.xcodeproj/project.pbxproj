@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E96F66F427AF57DE00E27476 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96F66F327AF57DE00E27476 /* Person.swift */; };
 		E9737928279E027E00753996 /* FrontEndApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737927279E027E00753996 /* FrontEndApp.swift */; };
 		E973792A279E027E00753996 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737929279E027E00753996 /* ContentView.swift */; };
 		E973792C279E027F00753996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792B279E027F00753996 /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E96F66F327AF57DE00E27476 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		E9737924279E027E00753996 /* FrontEnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontEnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9737927279E027E00753996 /* FrontEndApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEndApp.swift; sourceTree = "<group>"; };
 		E9737929279E027E00753996 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			children = (
 				E9737927279E027E00753996 /* FrontEndApp.swift */,
 				E9737929279E027E00753996 /* ContentView.swift */,
+				E96F66F327AF57DE00E27476 /* Person.swift */,
 				E973792B279E027F00753996 /* Assets.xcassets */,
 				E973792D279E027F00753996 /* Preview Content */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E96F66F427AF57DE00E27476 /* Person.swift in Sources */,
 				E973792A279E027E00753996 /* ContentView.swift in Sources */,
 				E9737928279E027E00753996 /* FrontEndApp.swift in Sources */,
 			);
