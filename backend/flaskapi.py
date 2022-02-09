@@ -8,4 +8,4 @@ def get_items():
     imgStr = reciept["base64"]
     return imgStr
 
-app.run(host='127.0.0.1', port=5000)
+app.run(host='127.0.0.1', port=5000) # if on PC, use '0.0.0.0' instead
