@@ -1,22 +1,11 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello():
-    return "Hello World!"
-
 @app.route('/get_items')
 def get_items():
-    pass
+    reciept = request.json
+    imgStr = reciept["base64"]
+    return imgStr
 
-@app.route('/post_picture')
-def post_picture():
-    pass
-
-# @app.route('/get_items', methods=["POST"])
-# def quiz(): 
-#     subject= request.form.get('sub')
-#     return render_template("quiz.html",subject=subject) 
-
-app.run(host='0.0.0.0', port=5000)
+app.run(host='127.0.0.1', port=5000) # if on PC, use '0.0.0.0' instead
