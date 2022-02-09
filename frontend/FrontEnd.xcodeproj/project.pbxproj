@@ -7,13 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		725E272927B36366000E9E1D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725E272827B36366000E9E1D /* ImagePicker.swift */; };
 		E9737928279E027E00753996 /* FrontEndApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737927279E027E00753996 /* FrontEndApp.swift */; };
 		E973792A279E027E00753996 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737929279E027E00753996 /* ContentView.swift */; };
 		E973792C279E027F00753996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792B279E027F00753996 /* Assets.xcassets */; };
 		E973792F279E027F00753996 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792E279E027F00753996 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		725E272A27B36574000E9E1D /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = file.bplist;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# builtin-copyPlist\n";
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXFileReference section */
+		725E272827B36366000E9E1D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		E9737924279E027E00753996 /* FrontEnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontEnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9737927279E027E00753996 /* FrontEndApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEndApp.swift; sourceTree = "<group>"; };
 		E9737929279E027E00753996 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,6 +71,7 @@
 				E9737929279E027E00753996 /* ContentView.swift */,
 				E973792B279E027F00753996 /* Assets.xcassets */,
 				E973792D279E027F00753996 /* Preview Content */,
+				725E272827B36366000E9E1D /* ImagePicker.swift */,
 			);
 			path = FrontEnd;
 			sourceTree = "<group>";
@@ -79,6 +96,7 @@
 				E9737922279E027E00753996 /* Resources */,
 			);
 			buildRules = (
+				725E272A27B36574000E9E1D /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -137,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				725E272927B36366000E9E1D /* ImagePicker.swift in Sources */,
 				E973792A279E027E00753996 /* ContentView.swift in Sources */,
 				E9737928279E027E00753996 /* FrontEndApp.swift in Sources */,
 			);
@@ -269,8 +288,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FrontEnd/Preview Content\"";
+				DEVELOPMENT_TEAM = KNX9P73C46;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -281,6 +302,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = Sibbons.FrontEnd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -297,8 +319,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FrontEnd/Preview Content\"";
+				DEVELOPMENT_TEAM = KNX9P73C46;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -309,6 +333,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = Sibbons.FrontEnd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
