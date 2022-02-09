@@ -7,15 +7,13 @@
 
 import SwiftUI
 
-//struct Person {
-//    let name: String
-//    let totalOwed: Int
-//    
-//    init(name: String){
-//        self.name = name
-//    }
-//}
-//
-//struct PersonsList{
-//    static let names = [Person]()
-//}
+struct Person {
+    let name: String
+    let totalOwed: Int
+    let id = UUID()
+    init(name: String){
+        self.name = name
+        self.totalOwed = 0
+    }
+}
+

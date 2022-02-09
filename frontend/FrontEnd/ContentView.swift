@@ -1,21 +1,22 @@
 import SwiftUI
 
 // Our observable object class
-class Person: ObservableObject {
-    @Published var nameList = [String]()
+class People: ObservableObject {
+    @Published var nameList = [Person]()
 }
 
 // A view that expects to find a GameSettings object
 // in the environment, and shows its score.
 struct ScoreView: View {
-    @EnvironmentObject var persons: Person
+    @EnvironmentObject var persons: People
     var body: some View {
         
             List{
                 Section{
-                    ForEach(persons.nameList, id:\.self) {item in
+                    ForEach(persons.nameList, id:\.id) {item in
                         VStack(alignment: .leading){
-                            Text(item).font(.headline)
+                            Text(item.name).font(.headline)
+                            Text(String(item.totalOwed))
                         }
                     }.onDelete(perform:{
                         indexSet in persons.nameList.remove(atOffsets:indexSet)
@@ -28,10 +29,8 @@ struct ScoreView: View {
 
 
 struct ContentView: View {
-    @StateObject var persons = Person()
-    //persons.nameList
+    @StateObject var persons = People()
     @State var text: String = ""
-    @State var namesList = [String]()
     var body: some View {
         NavigationView{
             List{
@@ -40,7 +39,8 @@ struct ContentView: View {
                         TextField("Peter Parker", text: $text)
                         Button(action: {
                             if !text.isEmpty{
-                                persons.nameList.insert(text, at:0)
+                                let temp = Person(name: text)
+                                persons.nameList.insert(temp, at:0)
                                 text = ""
                             }
                         }, label:{
@@ -49,9 +49,9 @@ struct ContentView: View {
                     }
                 }
                 Section{
-                    ForEach(persons.nameList, id:\.self) {item in
+                    ForEach(persons.nameList, id:\.id) {item in
                         VStack(alignment: .leading){
-                            Text(item).font(.headline)
+                            Text(item.name).font(.headline)
                         }
                     }.onDelete(perform:{
                         indexSet in persons.nameList.remove(atOffsets:indexSet)
