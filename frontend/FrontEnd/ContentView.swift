@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  FrontEnd
-//
-//  Created by Sibbons Shrestha on 1/23/22.
-//
-
 import SwiftUI
 
 struct LandingPageView: View {
@@ -100,6 +93,7 @@ final class ViewModel: ObservableObject {
             print ("strBase64")
         }
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -107,3 +101,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
