@@ -6,12 +6,15 @@ from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import FormTrainingClient
 from azure.ai.formrecognizer import FormRecognizerClient
 
-class azureReceipt:
+class AzureReceipt:
     # sets up credentials for Azure api
     # input: NONE 
     # output: azure api object 
-    def get_credentials():
-        credentials = json.load(open('./credential.json'))
+    def __init__(self):
+        pass
+
+    def get_credentials(self):
+        credentials = json.load(open('./backend/credential.json'))
         API_KEY = credentials['API_KEY']
         ENDPOINT = credentials['ENDPOINT']
         return FormRecognizerClient(ENDPOINT, AzureKeyCredential(API_KEY))
@@ -19,13 +22,13 @@ class azureReceipt:
     # get_receipt(): Converts base64 string to receipt_pic.jpeg file 
     # input: none 
     # output: receipt image file
-    def get_receipt(b64String):
+    def get_receipt(self, img_str):
         # Converts base64 string to receipt_pic.jpeg file 
         # img_data = json.load(open('./receipt.json'))
         # with open("receipt_pic.jpeg","wb") as fh:
         #     fh.write(base64.b64decode(img_data['img_string']))
         with open("receipt_pic.jpeg","wb") as fh:
-            fh.write(base64.b64decode(b64String))
+            fh.write(base64.b64decode(img_str))
 
         # open and read image for azure api object
         with open("./receipt_pic.jpeg", "rb") as fd:
@@ -35,7 +38,7 @@ class azureReceipt:
     # parse_receipt(receipt): runs azure recognizer on receipt image 
     # input: read receipt image file 
     # output: dictionary of receipt objects
-    def parse_receipt(receipt, form_recognizer_client):
+    def parse_receipt(self, receipt, form_recognizer_client):
         # scans picture using premade-receipt recoginizer
         poller = form_recognizer_client.begin_recognize_receipts(receipt, locale="en-US")
         result = poller.result()
@@ -58,20 +61,25 @@ class azureReceipt:
                     if name == "Tax" or name == "Subtotal" or name == "Total" or name == "Tip":
                         items_d[name] = field.value
 
-        for i in items_d:
-            print('Item: ', i)
-            print('Value: ', items_d[i])
+        # for i in items_d:
+        #     print('Item: ', i)
+        #     print('Value: ', items_d[i])
         return items_d
 
     # gets receipt image data and parses it 
-    def get():
-        form_recognizer_client = get_credentials()
+    def get(self, img_str):
+        form_recognizer_client = self.get_credentials()
+        # imageString = json_data["base64String"] # get b64 string
 
-        json_data = request.get_json(silent=True)
-        imageString = json_data["base64String"] # get b64 string
-
-        receipt = get_receipt(imageString) # make b64 string into img file
-        items_d = parse_receipt(receipt, form_recognizer_client) # run azure api over receipt and return dict of it's items
+        receipt = self.get_receipt(img_str) # make b64 string into img file
+        items_d = self.parse_receipt(receipt, form_recognizer_client) # run azure api over receipt and return dict of it's items
 
         return json.dumps(items_d)
 
+# if __name__ == "__main__":
+    
+#     img_data = json.load(open('./backend/receipt.json'))
+#     r = AzureReceipt()
+#     t = r.get(img_data['img_string'])
+#     print(t, 'done')
+    
