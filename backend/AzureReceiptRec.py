@@ -31,7 +31,7 @@ class AzureReceipt:
             fh.write(base64.b64decode(img_str))
 
         # open and read image for azure api object
-        with open("./receipt_pic.jpeg", "rb") as fd:
+        with open("./backend/receipt_pic.jpeg", "rb") as fd:
             receipt = fd.read()
             return receipt
 
