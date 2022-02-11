@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/get_items')
+def get_items():
+    reciept = request.json
+    imgStr = reciept["base64"]
+    return imgStr
 
-def hello():
-    return "Hello World!"
-
-app.run(host='0.0.0.0', port=5000)
+app.run(host='127.0.0.1', port=5000) # if on PC, use '0.0.0.0' instead
