@@ -27,7 +27,7 @@ class AzureReceipt:
         # img_data = json.load(open('./receipt.json'))
         # with open("receipt_pic.jpeg","wb") as fh:
         #     fh.write(base64.b64decode(img_data['img_string']))
-        with open("receipt_pic.jpeg","wb") as fh:
+        with open("./backend/receipt_pic.jpeg","wb") as fh:
             fh.write(base64.b64decode(img_str))
 
         # open and read image for azure api object
