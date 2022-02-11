@@ -12,6 +12,7 @@
 		E973792A279E027E00753996 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737929279E027E00753996 /* ContentView.swift */; };
 		E973792C279E027F00753996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792B279E027F00753996 /* Assets.xcassets */; };
 		E973792F279E027F00753996 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792E279E027F00753996 /* Preview Assets.xcassets */; };
+		E9B9903627B6ED390039ADBD /* Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B9903527B6ED390039ADBD /* Names.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -35,6 +36,7 @@
 		E9737929279E027E00753996 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E973792B279E027F00753996 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E973792E279E027F00753996 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E9B9903527B6ED390039ADBD /* Names.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Names.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,8 @@
 			children = (
 				E9737927279E027E00753996 /* FrontEndApp.swift */,
 				E9737929279E027E00753996 /* ContentView.swift */,
+				E9B9903527B6ED390039ADBD /* Names.swift */,
+				E96F66F327AF57DE00E27476 /* Person.swift */,
 				E973792B279E027F00753996 /* Assets.xcassets */,
 				E973792D279E027F00753996 /* Preview Content */,
 				725E272827B36366000E9E1D /* ImagePicker.swift */,
@@ -155,8 +159,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				725E272927B36366000E9E1D /* ImagePicker.swift in Sources */,
+				E96F66F427AF57DE00E27476 /* Person.swift in Sources */
 				E973792A279E027E00753996 /* ContentView.swift in Sources */,
+				E9B9903627B6ED390039ADBD /* Names.swift in Sources */,
 				E9737928279E027E00753996 /* FrontEndApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
