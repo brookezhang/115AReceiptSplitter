@@ -42,7 +42,7 @@ class AzureReceipt:
         # scans picture using premade-receipt recoginizer
         poller = form_recognizer_client.begin_recognize_receipts(receipt, locale="en-US")
         result = poller.result()
-        items_d = {} # dictionary to hold receipt items and their values
+        item_list = [] # dictionary to hold receipt items and their values
 
         # loop through list to print and add to dictionaries 
         for receipt in result:
@@ -50,21 +50,25 @@ class AzureReceipt:
                 if name == "Items":
                     # print("Receipt Items:")
                     for idx, items in enumerate(field.value):
-                        temp = ''
+                        entry = {}
+                        entry = {}
                         for item_name, item in items.value.items():
                             if item_name == "Name":
-                                items_d[item.value] = ''
-                                temp = item.value
+                                entry['item_name'] = item.value
                             elif item_name == "TotalPrice":
-                                items_d[temp] = item.value
+                                entry['price'] = item.value
+                        item_list.append(entry)
                 else:
                     if name == "Tax" or name == "Subtotal" or name == "Total" or name == "Tip":
-                        items_d[name] = field.value
+                        ending = {}
+                        ending['item_name'] = name
+                        ending['price'] = field.value
+                        item_list.append(ending)
 
         # for i in items_d:
         #     print('Item: ', i)
         #     print('Value: ', items_d[i])
-        return items_d
+        return item_list
 
     # gets receipt image data and parses it 
     def get(self, img_str):
@@ -76,10 +80,10 @@ class AzureReceipt:
 
         return json.dumps(items_d)
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     
-#     img_data = json.load(open('./backend/receipt.json'))
-#     r = AzureReceipt()
-#     t = r.get(img_data['img_string'])
-#     print(t, 'done')
+    img_data = json.load(open('./backend/receipt.json'))
+    r = AzureReceipt()
+    t = r.get(img_data['img_string'])
+    print(t, 'done')
     
