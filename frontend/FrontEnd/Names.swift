@@ -30,10 +30,11 @@ struct NamingTest: View {
 }
 
 struct Names: View {
-    @StateObject var persons = People()
+    // @StateObject var persons = People()
+    @EnvironmentObject var persons: People
     @State var text: String = ""
     var body: some View {
-        NavigationView{
+        // NavigationView{
             List{
                 Section(header: Text("Enter New Name Below")){
                     HStack{
@@ -62,7 +63,9 @@ struct Names: View {
                     Text("See Names in different view")
                 }
             }.navigationTitle("Add Names")
-        }.environmentObject(persons)
+        // }
+        // .environmentObject(persons)
+        // .navigationViewStyle(.stack)
     }
 
 }

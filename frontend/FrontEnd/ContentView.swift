@@ -3,6 +3,8 @@ import SwiftUI
 struct LandingPageView: View {
     @StateObject var viewModel = ViewModel()
     @State var uploadImage = false
+    @State var isUpload = false
+    @StateObject var persons = People()
     
     var body: some View {
         
@@ -13,10 +15,12 @@ struct LandingPageView: View {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
-                    NavigationLink(destination: EmptyView()) {
+                    NavigationLink(destination: Names(), isActive: $isUpload) {
                         VStack{
-                            // Text("Upload Photo").font(.headline)
-                            Button(action: {viewModel.sendBase64(image: image)}) {
+                            Button(action: {
+                                viewModel.sendBase64(image: image)
+                                self.isUpload = true
+                            }) {
                                 Text("Upload Photo")
                                     .font(.headline)
                             }
@@ -50,6 +54,8 @@ struct LandingPageView: View {
                 ImagePicker(sourceType: viewModel.sourceType, completionHandler: viewModel.didSelectImage)
             })
         }
+        .navigationViewStyle(.stack)
+        .environmentObject(persons)
     }
 }
 
@@ -91,9 +97,31 @@ final class ViewModel: ObservableObject {
         // comment this out once we get API working
         if (strBase64 != "") {
             print ("strBase64")
+//            let params = ["base64": strBase64] as Dictionary<String, String>
+//            print (params.keys)
+//
+//            let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+//
+//            var request = URLRequest(url: URL(string: "http://localhost:5000/get_items")!)
+//            request.httpMethod = "GET"
+//            // request.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
+//            request.httpBody = try! JSONSerialization.data(withJSONObject: [], options: .prettyPrinted)
+//            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//            // let session = URLSession.shared
+//            let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
+//                // print(response!)
+//                do {
+//                    let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
+//                    print(json)
+//                } catch {
+//                    print("error")
+//                }
+//            })
+//
+//            task.resume()
         }
     }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
