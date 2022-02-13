@@ -6,11 +6,7 @@ app = Flask(__name__)
 def get_items():
     reciept = request.json
     imgStr = reciept["base64"]
-    return imgStr
-    
-def ret_items():
-    imgStr = get_items()
     r = AzureReceipt()
-    return r.get(imgStr)
+    return r.get(imgStr) 
 
 app.run(host='127.0.0.1', port=5000) # if on PC, use '0.0.0.0' instead
