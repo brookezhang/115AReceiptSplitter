@@ -7,36 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		725E272927B36366000E9E1D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725E272827B36366000E9E1D /* ImagePicker.swift */; };
+		7232BDD027A1EE73006D6291 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7232BDCF27A1EE73006D6291 /* ImagePicker.swift */; };
+		72FBEFBE27B71EE300DC14A3 /* Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FBEFBD27B71EE300DC14A3 /* Names.swift */; };
+		72FBEFC027B71F0200DC14A3 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FBEFBF27B71F0200DC14A3 /* Person.swift */; };
 		E9737928279E027E00753996 /* FrontEndApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737927279E027E00753996 /* FrontEndApp.swift */; };
 		E973792A279E027E00753996 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737929279E027E00753996 /* ContentView.swift */; };
 		E973792C279E027F00753996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792B279E027F00753996 /* Assets.xcassets */; };
 		E973792F279E027F00753996 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792E279E027F00753996 /* Preview Assets.xcassets */; };
-		E9B9903627B6ED390039ADBD /* Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B9903527B6ED390039ADBD /* Names.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildRule section */
-		725E272A27B36574000E9E1D /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			fileType = file.bplist;
-			inputFiles = (
-			);
-			isEditable = 1;
-			outputFiles = (
-			);
-			script = "# builtin-copyPlist\n";
-		};
-/* End PBXBuildRule section */
-
 /* Begin PBXFileReference section */
-		725E272827B36366000E9E1D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		7232BDCF27A1EE73006D6291 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		72FBEFBD27B71EE300DC14A3 /* Names.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Names.swift; sourceTree = "<group>"; };
+		72FBEFBF27B71F0200DC14A3 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		E9737924279E027E00753996 /* FrontEnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontEnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9737927279E027E00753996 /* FrontEndApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontEndApp.swift; sourceTree = "<group>"; };
 		E9737929279E027E00753996 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E973792B279E027F00753996 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E973792E279E027F00753996 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E9B9903527B6ED390039ADBD /* Names.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Names.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,11 +59,11 @@
 			children = (
 				E9737927279E027E00753996 /* FrontEndApp.swift */,
 				E9737929279E027E00753996 /* ContentView.swift */,
-				E9B9903527B6ED390039ADBD /* Names.swift */,
-				E96F66F327AF57DE00E27476 /* Person.swift */,
+				72FBEFBD27B71EE300DC14A3 /* Names.swift */,
 				E973792B279E027F00753996 /* Assets.xcassets */,
 				E973792D279E027F00753996 /* Preview Content */,
-				725E272827B36366000E9E1D /* ImagePicker.swift */,
+				7232BDCF27A1EE73006D6291 /* ImagePicker.swift */,
+				72FBEFBF27B71F0200DC14A3 /* Person.swift */,
 			);
 			path = FrontEnd;
 			sourceTree = "<group>";
@@ -100,7 +88,6 @@
 				E9737922279E027E00753996 /* Resources */,
 			);
 			buildRules = (
-				725E272A27B36574000E9E1D /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -159,9 +146,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E96F66F427AF57DE00E27476 /* Person.swift in Sources */
+				72FBEFC027B71F0200DC14A3 /* Person.swift in Sources */,
+				7232BDD027A1EE73006D6291 /* ImagePicker.swift in Sources */,
 				E973792A279E027E00753996 /* ContentView.swift in Sources */,
-				E9B9903627B6ED390039ADBD /* Names.swift in Sources */,
+				72FBEFBE27B71EE300DC14A3 /* Names.swift in Sources */,
 				E9737928279E027E00753996 /* FrontEndApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,7 +284,7 @@
 				DEVELOPMENT_TEAM = KNX9P73C46;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access to scan the receipt";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -308,7 +296,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = Sibbons.FrontEnd;
+				PRODUCT_BUNDLE_IDENTIFIER = Sidrah.FrontEnd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -327,7 +315,7 @@
 				DEVELOPMENT_TEAM = KNX9P73C46;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access to scan the receipt";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -339,7 +327,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = Sibbons.FrontEnd;
+				PRODUCT_BUNDLE_IDENTIFIER = Sidrah.FrontEnd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
