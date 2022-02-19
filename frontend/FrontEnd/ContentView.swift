@@ -95,32 +95,70 @@ final class ViewModel: ObservableObject {
         let strBase64 = convertImageToBase64String(img: image)
         
         // comment this out once we get API working
-        if (strBase64 != "") {
-            print ("strBase64")
-//            let params = ["base64": strBase64] as Dictionary<String, String>
-//            print (params.keys)
+        
+            if (strBase64 != "") {
+                print ("strBase64")
+                let params = ["base64": strBase64] as Dictionary<String, String>
+                print (params.keys)
+
+                let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+
+                var request = URLRequest(url: URL(string: "http://localhost:5000/get_items")!)
+                request.httpMethod = "POST"
+                request.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
+                // request.httpBody = try! JSONSerialization.data(withJSONObject: [], options: .prettyPrinted)
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                // let session = URLSession.shared
+                let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                    print("response!")
+                    guard let data = data,
+                          let response = response as? HTTPURLResponse,
+                            error == nil else {                                              // check for fundamental networking error
+                            print("error", error ?? "Unknown error")
+                            return
+                        }
+
+                    guard (200 ... 299) ~= response.statusCode else {                    // check for http errors
+                        print("statusCode should be 2xx, but is \(response.statusCode)")
+                        print("response = \(response)")
+                        return
+                    }
+
+                    let responseString = String(data: data, encoding: .utf8)
+                    print("responseString = \(responseString as String?)")
+                })
+
+                task.resume()
+                }
+
+//        let url = URL(string: "http://127.0.0.1:5000/test")
+//        guard let requestUrl = url else { fatalError() }
+//        // Create URL Request
+//        var request = URLRequest(url: requestUrl)
+//        // Specify HTTP Method to use
+//        request.httpMethod = "GET"
+//        // Send HTTP Request
+//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
 //
-//            let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+//            // Check if Error took place
+//            if let error = error {
+//                print("Error took place \(error)")
+//                return
+//            }
 //
-//            var request = URLRequest(url: URL(string: "http://localhost:5000/get_items")!)
-//            request.httpMethod = "GET"
-//            // request.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
-//            request.httpBody = try! JSONSerialization.data(withJSONObject: [], options: .prettyPrinted)
-//            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//            // Read HTTP Response Status code
+//            if let response = response as? HTTPURLResponse {
+//                print("Response HTTP Status code: \(response.statusCode)")
+//            }
 //
-//            // let session = URLSession.shared
-//            let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
-//                // print(response!)
-//                do {
-//                    let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
-//                    print(json)
-//                } catch {
-//                    print("error")
-//                }
-//            })
+//            // Convert HTTP Response Data to a simple String
+//            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+//                print("Response data string:\n \(dataString)")
+//            }
 //
-//            task.resume()
-        }
+//        }
+//        task.resume()
     }
 }
 
