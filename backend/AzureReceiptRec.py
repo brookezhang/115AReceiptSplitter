@@ -14,7 +14,7 @@ class AzureReceipt:
         pass
 
     def get_credentials(self):
-        credentials = json.load(open('./backend/credential.json'))
+        credentials = json.load(open('./credential.json'))
         API_KEY = credentials['API_KEY']
         ENDPOINT = credentials['ENDPOINT']
         return FormRecognizerClient(ENDPOINT, AzureKeyCredential(API_KEY))
@@ -27,11 +27,11 @@ class AzureReceipt:
         # img_data = json.load(open('./receipt.json'))
         # with open("receipt_pic.jpeg","wb") as fh:
         #     fh.write(base64.b64decode(img_data['img_string']))
-        with open("./backend/receipt_pic.jpeg","wb") as fh:
+        with open("./receipt_pic.jpeg","wb") as fh:
             fh.write(base64.b64decode(img_str))
 
         # open and read image for azure api object
-        with open("./backend/receipt_pic.jpeg", "rb") as fd:
+        with open("./receipt_pic.jpeg", "rb") as fd:
             receipt = fd.read()
             return receipt
 
@@ -82,7 +82,7 @@ class AzureReceipt:
 
 if __name__ == "__main__":
     
-    img_data = json.load(open('./backend/receipt.json'))
+    img_data = json.load(open('./receipt.json'))
     r = AzureReceipt()
     t = r.get(img_data['img_string'])
     print(t, 'done')
