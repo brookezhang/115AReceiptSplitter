@@ -5,7 +5,7 @@ struct LandingPageView: View {
     @State var uploadImage = false
     @State var isUpload = false
     @StateObject var persons = People()
-    
+
     var body: some View {
         
         NavigationView{
@@ -56,12 +56,15 @@ struct LandingPageView: View {
         }
         .navigationViewStyle(.stack)
         .environmentObject(persons)
+
     }
 }
 
 struct ContentView: View {
+
     var body: some View {
-        LandingPageView()
+        //LandingPageView()
+        ReceiptList()
     }
 }
 
