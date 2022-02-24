@@ -1,14 +1,20 @@
 import SwiftUI
 
+class Peoples: ObservableObject {
+    @Published var nameList : [Person] = [Person(name: "bobby"), Person(name: "joe")]
+}
+
 struct NamesView: View{
     @State private var names: [String] = ["Bob", "Joe", "Billy", "Chanel"]
+    @ObservedObject var ppl = Peoples()
+
     var columns = Array(repeating: GridItem(.flexible(), spacing: 5), count: 2)
 
     var body: some View{
         LazyVGrid(columns: columns, spacing: 10){
-            ForEach(names, id: \.self){name in
-                Text(name)
-                    .onDrag { NSItemProvider(object: name as NSString) }
+            ForEach(ppl.nameList){p in
+                Text(p.name)
+                    .onDrag { NSItemProvider(object: p.name as NSString) }
             }
         }
     }
@@ -25,7 +31,6 @@ struct ItemRow: View{
             }.contentShape(Rectangle())
              .frame(height: 20)
              .padding(10)
-            
             ZStack(alignment: .leading){
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack(alignment: .center){
@@ -35,12 +40,12 @@ struct ItemRow: View{
                         }
                         Spacer(minLength: 0)
                     }.contentShape(Rectangle())
-                    .frame(height: 30)
+                    .frame(height: 20)
                 }
             }.padding(10)
         }.background(Color.black.opacity(0.07))
-            .cornerRadius(15)
-            .onDrop(of: ["public.text"], delegate: item)
+         .cornerRadius(15)
+         .onDrop(of: ["public.text"], delegate: item)
     }
 }
 
@@ -69,7 +74,6 @@ struct ReceiptList_Previews: PreviewProvider {
 
 class Items: ObservableObject {
     let id = UUID()
-
     @Published var itemsList: [Item] = [
         Item(name: "testing1", price: 200, pplList: [String]()),
         Item(name: "testing2", price: 100, pplList: [String]()),
@@ -97,9 +101,8 @@ class Item: ObservableObject,Identifiable, DropDelegate{
                           // Extract string from data
                           let inputStr = String(decoding: data, as: UTF8.self)
                           DispatchQueue.main.async {
-                              print(inputStr)
                               self.peopleList.append(inputStr)
-                              print(self.peopleList)
+                              print(self.name, self.peopleList)
                           }
                       }
                   }
@@ -107,10 +110,6 @@ class Item: ObservableObject,Identifiable, DropDelegate{
                   return false
               }
             return true
-    }
-    // setting Action as Move...
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-      return DropProposal(operation: .move)
     }
 
 }
