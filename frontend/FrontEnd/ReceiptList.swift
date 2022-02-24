@@ -14,40 +14,45 @@ struct NamesView: View{
     }
 }
 
+struct SingleItem: View{
+    @StateObject var singleItem: Item
+    var body: some View{
+        HStack{
+            Text(singleItem.name)
+            Spacer()
+            Text("Price: \(singleItem.price)")
+        }.contentShape(Rectangle())
+         .frame(height: 20)
+         .padding(10)
+        
+        ZStack(alignment: .leading){
+            ScrollView(.horizontal, showsIndicators: false){
+                HStack(alignment: .center){
+                    Text("Paid by: ")
+                    ForEach(singleItem.peopleList, id: \.self ){name in
+                            Text(name)
+                    }
+                    Spacer(minLength: 0)
+                }.contentShape(Rectangle())
+                .frame(height: 30)
+            }.onDrop(of: ["public.text"], delegate: singleItem)
+        }.padding(10)
+    }
+}
+
 struct ReceiptList: View {
 
-    @StateObject var delgate = Items()
+    @ObservedObject var delgate = Items()
+    @ObservedObject var singleItem = Item(name: "One item", price: 200, pplList: [String]())
+    @ObservedObject var singleItem2 = Item(name: "Two item", price: 200, pplList: [String]())
+
     var body: some View {
         VStack{
             NamesView()
             ScrollView{
                 LazyVStack(alignment: .leading, spacing: 10){
-                    ForEach(delgate.itemsList ){ item in
-                        VStack{
-                            HStack{
-                                Text(item.name)
-                                Spacer()
-                                Text("Price: \(item.price)")
-                            }.contentShape(Rectangle())
-                             .frame(height: 20)
-                             .padding(10)
-                            ZStack(alignment: .leading){
-                                ScrollView(.horizontal, showsIndicators: false){
-                                    HStack(alignment: .center){
-                                        Text("Paid by: ")
-                                        ForEach(delgate.test, id: \.self ){name in
-                                                Text(name)
-                                        }
-                                        Spacer(minLength: 0)
-                                    }.contentShape(Rectangle())
-                                    .frame(height: 30)
-                                }
-                            }.padding(10)
-                            
-                        }.background(Color.black.opacity(0.07))
-                        .cornerRadius(15)
-                        .onDrop(of: ["public.text"], delegate: delgate)
-                    }
+                    SingleItem(singleItem: singleItem)
+                    SingleItem(singleItem: singleItem2)
                 }.padding(20)
             }
         }
@@ -91,8 +96,8 @@ class Items: ObservableObject, DropDelegate {
 class Item: ObservableObject,Identifiable, DropDelegate{
     let id = UUID()
     
-    var name: String
-    var price: Int
+    @Published var name: String
+    @Published var price: Int
     @Published var peopleList: [String]
     
     init(name: String, price: Int, pplList: [String]) {
