@@ -1,5 +1,7 @@
 import json
 import base64
+import os
+from dotenv import load_dotenv
 from flask import Flask, request
 from azure.core.exceptions import ResourceNotFoundError
 from azure.core.credentials import AzureKeyCredential
@@ -14,19 +16,18 @@ class AzureReceipt:
         pass
 
     def get_credentials(self):
-        credentials = json.load(open('./credential.json'))
-        API_KEY = credentials['API_KEY']
-        ENDPOINT = credentials['ENDPOINT']
+        # credentials = json.load(open('./credential.json'))
+        # API_KEY = credentials['API_KEY']
+        # ENDPOINT = credentials['ENDPOINT']
+        load_dotenv()
+        API_KEY = os.getenv("API_KEY")
+        ENDPOINT = os.getenv("ENDPOINT")
         return FormRecognizerClient(ENDPOINT, AzureKeyCredential(API_KEY))
 
     # get_receipt(): Converts base64 string to receipt_pic.jpeg file 
     # input: none 
     # output: receipt image file
     def get_receipt(self, img_str):
-        # Converts base64 string to receipt_pic.jpeg file 
-        # img_data = json.load(open('./receipt.json'))
-        # with open("receipt_pic.jpeg","wb") as fh:
-        #     fh.write(base64.b64decode(img_data['img_string']))
         with open("./receipt_pic.jpeg","wb") as fh:
             fh.write(base64.b64decode(img_str))
 
@@ -38,6 +39,8 @@ class AzureReceipt:
     # parse_receipt(receipt): runs azure recognizer on receipt image 
     # input: read receipt image file 
     # output: dictionary of receipt objects
+    # Used code from this website:
+    # https://docs.microsoft.com/en-us/azure/applied-ai-services/form-recognizer/how-to-guides/try-sdk-rest-api?pivots=programming-language-python
     def parse_receipt(self, receipt, form_recognizer_client):
         # scans picture using premade-receipt recoginizer
         poller = form_recognizer_client.begin_recognize_receipts(receipt, locale="en-US")
@@ -64,26 +67,18 @@ class AzureReceipt:
                         ending['item_name'] = name
                         ending['price'] = field.value
                         item_list.append(ending)
-
-        # for i in items_d:
-        #     print('Item: ', i)
-        #     print('Value: ', items_d[i])
         return item_list
 
     # gets receipt image data and parses it 
     def get(self, img_str):
         form_recognizer_client = self.get_credentials()
-        # imageString = json_data["base64String"] # get b64 string
-
         receipt = self.get_receipt(img_str) # make b64 string into img file
-        items_d = self.parse_receipt(receipt, form_recognizer_client) # run azure api over receipt and return dict of it's items
-
+        items_d = self.parse_receipt(receipt, form_recognizer_client) # run azure api over receipt and return item list
         return json.dumps(items_d)
 
 if __name__ == "__main__":
-    
     img_data = json.load(open('./receipt.json'))
     r = AzureReceipt()
     t = r.get(img_data['img_string'])
-    print(t, 'done')
+    # print(t, 'done')
     
