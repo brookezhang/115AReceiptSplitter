@@ -6,7 +6,8 @@ class Peoples: ObservableObject {
 
 struct NamesView: View{
     @State private var names: [String] = ["Bob", "Joe", "Billy", "Chanel"]
-    @ObservedObject var ppl = Peoples()
+//    @ObservedObject var ppl = Peoples()
+    @EnvironmentObject var ppl: People
 
     var columns = Array(repeating: GridItem(.flexible(), spacing: 5), count: 2)
 
@@ -51,13 +52,14 @@ struct ItemRow: View{
 
 struct ReceiptList: View {
 
-    @ObservedObject var delgate = Items()
+    // @ObservedObject var delgate = Items()
+    @EnvironmentObject var itemsTemp: Items
     var body: some View {
         VStack{
             NamesView()
             ScrollView{
                 LazyVStack(alignment: .leading, spacing: 10){
-                    ForEach(delgate.itemsList ){item in
+                    ForEach(itemsTemp.itemsList ){item in
                         ItemRow(item: item)
                     }
                 }.padding(20)
@@ -73,21 +75,22 @@ struct ReceiptList_Previews: PreviewProvider {
 }
 
 class Items: ObservableObject {
-    let id = UUID()
-    @Published var itemsList: [Item] = [
-        Item(name: "testing1", price: 200, pplList: [String]()),
-        Item(name: "testing2", price: 100, pplList: [String]()),
-    ]
+//    let id = UUID()
+//    @Published var itemsList: [Item] = [
+//        Item(name: "testing1", price: 200, pplList: [String]()),
+//        Item(name: "testing2", price: 100, pplList: [String]()),
+//    ]
+    @Published var itemsList = [Item]()
 }
 
 class Item: ObservableObject,Identifiable, DropDelegate{
     let id = UUID()
     
     @Published var name: String
-    @Published var price: Int
+    @Published var price: Double
     @Published var peopleList: [String]
     
-    init(name: String, price: Int, pplList: [String]) {
+    init(name: String, price: Double, pplList: [String]) {
         self.name = name
         self.price = price
         self.peopleList = pplList

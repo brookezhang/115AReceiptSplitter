@@ -5,6 +5,7 @@ struct LandingPageView: View {
     @State var uploadImage = false
     @State var isUpload = false
     @StateObject var persons = People()
+    @StateObject var itemsTemp = Items()
 
     var body: some View {
         
@@ -18,7 +19,9 @@ struct LandingPageView: View {
                     NavigationLink(destination: Names(), isActive: $isUpload) {
                         VStack{
                             Button(action: {
-                                viewModel.sendBase64(image: image)
+                                itemsTemp.itemsList = viewModel.sendBase64(image: image)
+                                sleep(5)
+                                print (itemsTemp.itemsList)
                                 self.isUpload = true
                             }) {
                                 Text("Upload Photo")
@@ -56,21 +59,25 @@ struct LandingPageView: View {
         }
         .navigationViewStyle(.stack)
         .environmentObject(persons)
-
+        .environmentObject(itemsTemp)
     }
 }
 
 struct ContentView: View {
 
     var body: some View {
-        //LandingPageView()
-        ReceiptList()
+        LandingPageView()
+        // ReceiptList()
     }
 }
 
+// https://augmentedcode.io/2020/11/22/using-an-image-picker-in-swiftui/
 final class ViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isPresentingImagePicker = false
+    @EnvironmentObject var itemsTemp: Items
+    //@ObservedObject var itemsTemp = Items()
+    var itemsArr = [Item]()
     private(set) var sourceType: ImagePicker.SourceType = .camera
     
     func choosePhoto() {
@@ -94,36 +101,48 @@ final class ViewModel: ObservableObject {
         return strBase64
     }
     
-    func sendBase64 (image: UIImage) {
+    func sendBase64 (image: UIImage) -> Array<Item> {
         let strBase64 = convertImageToBase64String(img: image)
-        
-        // comment this out once we get API working
-        if (strBase64 != "") {
-            print ("strBase64")
-//            let params = ["base64": strBase64] as Dictionary<String, String>
-//            print (params.keys)
-//
-//            let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
-//
-//            var request = URLRequest(url: URL(string: "http://localhost:5000/get_items")!)
-//            request.httpMethod = "GET"
-//            // request.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
-//            request.httpBody = try! JSONSerialization.data(withJSONObject: [], options: .prettyPrinted)
-//            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//            // let session = URLSession.shared
-//            let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
-//                // print(response!)
-//                do {
-//                    let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
-//                    print(json)
-//                } catch {
-//                    print("error")
-//                }
-//            })
-//
-//            task.resume()
+        let Url = String(format: "http://127.0.0.1:5000/get_items")
+        guard let serviceUrl = URL(string: Url) else { return [Item]() }
+        let parameterDictionary = ["base64" : strBase64]
+        var request = URLRequest(url: serviceUrl)
+        request.httpMethod = "POST"
+        request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options: []) else {
+            return [Item]()
         }
+        request.httpBody = httpBody
+        
+        let session = URLSession.shared
+        session.dataTask(with: request) { (data, _, error) in
+//            if let response = response {
+//                //print(response)
+//            }
+            if let data = data {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    if let object = json as? [String: Any] {
+                        print ("dictionary obj", object)
+                    } else if let object = json as? [Any] {
+                        for anItem in object as! [Dictionary<String, AnyObject>] {
+                            let item = anItem["item_name"] as! String
+                            let price = anItem["price"] as! Double
+                            let full_item = Item(name: item, price: price, pplList: [String]())
+                            print (full_item.name, full_item.price)
+                            self.itemsArr.append(full_item)
+                            
+                        }
+                        // self.itemsTemp.itemsList = self.itemsArr
+                        // print("Items list", self.itemsTemp.itemsList)
+                        // return self.itemsArr
+                    }
+                } catch {
+                    print(error)
+                }
+            }
+        }.resume()
+        return self.itemsArr
     }
 }
 
