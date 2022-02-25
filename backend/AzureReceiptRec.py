@@ -9,16 +9,13 @@ from azure.ai.formrecognizer import FormTrainingClient
 from azure.ai.formrecognizer import FormRecognizerClient
 
 class AzureReceipt:
-    # sets up credentials for Azure api
-    # input: NONE 
-    # output: azure api object 
     def __init__(self):
         pass
 
+    # sets up credentials for Azure api
+    # input: NONE 
+    # output: azure api object 
     def get_credentials(self):
-        # credentials = json.load(open('./credential.json'))
-        # API_KEY = credentials['API_KEY']
-        # ENDPOINT = credentials['ENDPOINT']
         load_dotenv()
         API_KEY = os.getenv("API_KEY")
         ENDPOINT = os.getenv("ENDPOINT")
