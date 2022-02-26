@@ -53,6 +53,7 @@ struct ItemRow: View{
 struct ReceiptList: View {
 
     // @ObservedObject var delgate = Items()
+    // @ObservedObject var itemsTemp = Items()
     @EnvironmentObject var itemsTemp: Items
     var body: some View {
         VStack{

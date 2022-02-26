@@ -6,7 +6,9 @@ struct LandingPageView: View {
     @State var isUpload = false
     @StateObject var persons = People()
     @StateObject var itemsTemp = Items()
-
+    // @ObservedObject var itemsTemp = Items()
+    @State var temp = [Item]()
+    
     var body: some View {
         
         NavigationView{
@@ -19,10 +21,13 @@ struct LandingPageView: View {
                     NavigationLink(destination: Names(), isActive: $isUpload) {
                         VStack{
                             Button(action: {
-                                itemsTemp.itemsList = viewModel.sendBase64(image: image)
-                                sleep(5)
-                                print (itemsTemp.itemsList)
-                                self.isUpload = true
+                                viewModel.sendBase64(image: image, completion: {list in
+                                    DispatchQueue.main.async {
+                                        self.itemsTemp.itemsList = list!
+                                        print ("notified", self.itemsTemp.itemsList)
+                                        self.isUpload = true
+                                    }
+                                })
                             }) {
                                 Text("Upload Photo")
                                     .font(.headline)
@@ -67,16 +72,14 @@ struct ContentView: View {
 
     var body: some View {
         LandingPageView()
-        // ReceiptList()
     }
 }
 
 // https://augmentedcode.io/2020/11/22/using-an-image-picker-in-swiftui/
-final class ViewModel: ObservableObject {
+class ViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isPresentingImagePicker = false
-    @EnvironmentObject var itemsTemp: Items
-    //@ObservedObject var itemsTemp = Items()
+    @ObservedObject var itemsTemp = Items()
     var itemsArr = [Item]()
     private(set) var sourceType: ImagePicker.SourceType = .camera
     
@@ -101,19 +104,23 @@ final class ViewModel: ObservableObject {
         return strBase64
     }
     
-    func sendBase64 (image: UIImage) -> Array<Item> {
+    func sendBase64 (image: UIImage, completion: @escaping ([Item]?) -> Void) {
         let strBase64 = convertImageToBase64String(img: image)
         let Url = String(format: "http://127.0.0.1:5000/get_items")
-        guard let serviceUrl = URL(string: Url) else { return [Item]() }
+        guard let serviceUrl = URL(string: Url) else {
+            completion(nil)
+            return
+        }
         let parameterDictionary = ["base64" : strBase64]
         var request = URLRequest(url: serviceUrl)
         request.httpMethod = "POST"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options: []) else {
-            return [Item]()
+            completion(nil)
+            return
         }
         request.httpBody = httpBody
-        
+
         let session = URLSession.shared
         session.dataTask(with: request) { (data, _, error) in
 //            if let response = response {
@@ -122,27 +129,22 @@ final class ViewModel: ObservableObject {
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    if let object = json as? [String: Any] {
-                        print ("dictionary obj", object)
-                    } else if let object = json as? [Any] {
+                    if let object = json as? [Any] {
+                        self.itemsArr = []
                         for anItem in object as! [Dictionary<String, AnyObject>] {
                             let item = anItem["item_name"] as! String
                             let price = anItem["price"] as! Double
                             let full_item = Item(name: item, price: price, pplList: [String]())
-                            print (full_item.name, full_item.price)
                             self.itemsArr.append(full_item)
-                            
                         }
-                        // self.itemsTemp.itemsList = self.itemsArr
-                        // print("Items list", self.itemsTemp.itemsList)
-                        // return self.itemsArr
-                    }
+                        // print ("dispatch", self.itemsArr)
+                        completion(self.itemsArr)
+                    } else { completion(nil) }
                 } catch {
-                    print(error)
+                    print("error", error)
                 }
             }
         }.resume()
-        return self.itemsArr
     }
 }
 
