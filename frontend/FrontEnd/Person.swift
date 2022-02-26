@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Person {
+struct Person: Identifiable {
     let name: String
     let totalOwed: Int
     let id = UUID()

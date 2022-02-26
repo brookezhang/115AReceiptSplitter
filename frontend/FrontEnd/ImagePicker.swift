@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-
+// https://augmentedcode.io/2020/11/22/using-an-image-picker-in-swiftui/
 struct ImagePicker: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIImagePickerController
     typealias SourceType = UIImagePickerController.SourceType
@@ -51,48 +51,3 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
 }
-
-//struct ImagePicker: UIViewControllerRepresentable {
-//    func makeCoordinator() -> Coordinator {
-//        Coordinator(self)
-//    }
-//
-//
-//    var sourceType: UIImagePickerController.SourceType = .photoLibrary
-//
-//    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
-//        let imagePicker = UIImagePickerController()
-//        imagePicker.allowsEditing = false
-//        imagePicker.sourceType = sourceType
-//
-//        imagePicker.delegate = context.coordinator
-//
-//        return imagePicker
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {
-//
-//    }
-//
-//    @Binding var selectedImage: UIImage
-//    @Environment(\.presentationMode) private var presentationMode
-//
-//    final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-//
-//        var parent: ImagePicker
-//
-//        init(_ parent: ImagePicker) {
-//            self.parent = parent
-//        }
-//
-//        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-//            if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-//                parent.selectedImage = image
-//                // print ("image selected")
-//                sendBase64(image: image)
-//            }
-//
-//            parent.presentationMode.wrappedValue.dismiss()
-//        }
-//    }
-//}
