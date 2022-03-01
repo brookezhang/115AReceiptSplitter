@@ -27,7 +27,7 @@ struct ItemRow: View{
             HStack{
                 Text(item.name)
                 Spacer()
-                Text("Price: \(item.price)")
+                Text("Price: $\(String(format: "%.2f", item.price))")
             }.contentShape(Rectangle())
              .frame(height: 20)
              .padding(10)
