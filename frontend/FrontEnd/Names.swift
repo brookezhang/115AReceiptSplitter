@@ -59,7 +59,7 @@ struct Names: View {
                         indexSet in persons.nameList.remove(atOffsets:indexSet)
                     })
                 }
-                NavigationLink(destination: NamingTest()) {
+                NavigationLink(destination: ReceiptList()) {
                     Text("See Names in different view")
                 }
             }.navigationTitle("Add Names")
