@@ -5,8 +5,7 @@ class Peoples: ObservableObject {
 }
 
 struct NamesView: View{
-    @State private var names: [String] = ["Bob", "Joe", "Billy", "Chanel"]
-//    @ObservedObject var ppl = Peoples()
+    //@ObservedObject var ppl = Peoples()
     @EnvironmentObject var ppl: People
 
     var columns = Array(repeating: GridItem(.flexible(), spacing: 5), count: 2)
@@ -52,8 +51,7 @@ struct ItemRow: View{
 
 struct ReceiptList: View {
 
-    // @ObservedObject var delgate = Items()
-    // @ObservedObject var itemsTemp = Items()
+    //@ObservedObject var itemsTemp = Items()
     @EnvironmentObject var itemsTemp: Items
     var body: some View {
         VStack{
@@ -65,7 +63,7 @@ struct ReceiptList: View {
                     }
                 }.padding(20)
             }
-        }
+        }.navigationTitle("Drop names into items")
     }
 }
 
@@ -97,6 +95,8 @@ class Item: ObservableObject,Identifiable, DropDelegate{
         self.peopleList = pplList
     }
     func performDrop(info: DropInfo) -> Bool {
+        
+        
         if let item = info.itemProviders(for: ["public.text"]).first {
                   // Load the item
                   item.loadItem(forTypeIdentifier: "public.text", options: nil) { (text, err) in
@@ -104,6 +104,11 @@ class Item: ObservableObject,Identifiable, DropDelegate{
                       if let data = text as? Data {
                           // Extract string from data
                           let inputStr = String(decoding: data, as: UTF8.self)
+
+                              guard !self.peopleList.contains(inputStr) else {
+                              return
+                          }
+                          
                           DispatchQueue.main.async {
                               self.peopleList.append(inputStr)
                               print(self.name, self.peopleList)

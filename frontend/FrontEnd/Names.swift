@@ -11,24 +11,6 @@ class People: ObservableObject {
     @Published var nameList = [Person]()
 }
 
-struct NamingTest: View {
-    @EnvironmentObject var persons: People
-    var body: some View {
-        List{
-            Section{
-                ForEach(persons.nameList, id:\.id) {item in
-                    VStack(alignment: .leading){
-                        Text(item.name).font(.headline)
-                        Text(String(item.totalOwed))
-                    }
-                }.onDelete(perform:{
-                    indexSet in persons.nameList.remove(atOffsets:indexSet)
-                })
-            }
-        }
-}
-}
-
 struct Names: View {
     // @StateObject var persons = People()
     @EnvironmentObject var persons: People
@@ -59,8 +41,8 @@ struct Names: View {
                         indexSet in persons.nameList.remove(atOffsets:indexSet)
                     })
                 }
-                NavigationLink(destination: NamingTest()) {
-                    Text("See Names in different view")
+                NavigationLink(destination: ReceiptList()) {
+                    Text("Drop people in the next screen")
                 }
             }.navigationTitle("Add Names")
         // }
