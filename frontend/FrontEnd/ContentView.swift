@@ -1,11 +1,15 @@
 import SwiftUI
 
 struct LandingPageView: View {
+    // StateObjects
     @StateObject var viewModel = ViewModel()
-    @State var uploadImage = false
-    @State var isUpload = false
     @StateObject var persons = People()
     @StateObject var itemsTemp = Items()
+    @StateObject var totals = Totals()
+    
+    // States
+    @State var uploadImage = false
+    @State var isUpload = false
     @State var temp = [Item]()
     @State var isLoading = false
     @State private var buttonText = "Upload Photo"
@@ -27,8 +31,9 @@ struct LandingPageView: View {
                                     viewModel.sendBase64(image: image, completion: {list in
                                         DispatchQueue.main.async {
                                             self.isLoading.toggle()
-                                            self.itemsTemp.itemsList = list!
-                                            print ("notified", self.itemsTemp.itemsList)
+                                            self.itemsTemp.itemsList = Array(list![0..<(list!.count - 3)])
+                                            self.totals.totalsList = Array(list!.suffix(3))
+                                            print ("uploaded and parsed")
                                             self.isUpload = true
                                         }
                                     })
@@ -67,6 +72,7 @@ struct LandingPageView: View {
         .navigationViewStyle(.stack)
         .environmentObject(persons)
         .environmentObject(itemsTemp)
+        .environmentObject(totals)
     }
 }
 
@@ -82,9 +88,11 @@ struct ContentView: View {
 class ViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isPresentingImagePicker = false
-    @ObservedObject var itemsTemp = Items()
+    // @ObservedObject var itemsTemp = Items()
     var itemsArr = [Item]()
     private(set) var sourceType: ImagePicker.SourceType = .camera
+    
+    // @Published var totals = [Item]()
     
     func choosePhoto() {
         sourceType = .photoLibrary
@@ -138,6 +146,12 @@ class ViewModel: ObservableObject {
                             let item = anItem["item_name"] as! String
                             let price = anItem["price"] as! Double
                             let full_item = Item(name: item, price: price, pplList: [String]())
+//                            if (item == "Subtotal" || item == "Tax" || item == "Total") {
+//                                // print (item, price)
+//                                self.totals.append(full_item)
+//                            } else {
+//                                self.itemsArr.append(full_item)
+//                            }
                             self.itemsArr.append(full_item)
                         }
                         // print ("dispatch", self.itemsArr)

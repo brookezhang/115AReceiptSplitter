@@ -96,6 +96,10 @@ class Items: ObservableObject {
     @Published var itemsList = [Item]()
 }
 
+class Totals: ObservableObject {
+    @Published var totalsList = [Item]()
+}
+
 class Item: ObservableObject,Identifiable, DropDelegate{
     let id = UUID()
     
