@@ -38,10 +38,12 @@ struct ItemRow: View{
                 Spacer()
                 if (!item.peopleList.isEmpty) {
                     Text("Price per person: $\(String(format: "%.2f", (item.price / Double(item.peopleList.count))))")
-                } else {
-                    Text("Price per person: $\(String(format: "%.2f", item.price))")
                 }
+//                else {
+//                    Text("Price per person: $\(String(format: "%.2f", item.price))")
+//                }
             }.padding(.trailing, 10)
+                .frame(height: 10)
             
             ZStack(alignment: .leading){
                 ScrollView(.horizontal, showsIndicators: false){
