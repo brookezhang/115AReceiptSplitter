@@ -10,9 +10,9 @@ def get_items():
     r = AzureReceipt()
     t = r.get(imgStr)
     if t == 'Error':
-        return Response("{a':b'}", status=201, mimetype='application/json')
+        return json.dumps("Error"), 400
     else:
-        return t , 200
+        return t, 200
 
 
 app.run(host='127.0.0.1', port=5000) # if on PC, use '0.0.0.0' instead
