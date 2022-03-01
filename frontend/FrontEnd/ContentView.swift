@@ -6,61 +6,63 @@ struct LandingPageView: View {
     @State var isUpload = false
     @StateObject var persons = People()
     @StateObject var itemsTemp = Items()
-    // @ObservedObject var itemsTemp = Items()
     @State var temp = [Item]()
+    @State var isLoading = false
+    @State private var buttonText = "Upload Photo"
     
     var body: some View {
         
         NavigationView{
-            VStack(spacing: 32) {
-                Spacer()
-                if let image = viewModel.selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                    NavigationLink(destination: Names(), isActive: $isUpload) {
-                        VStack{
-                            Button(action: {
-                                viewModel.sendBase64(image: image, completion: {list in
-                                    DispatchQueue.main.async {
-                                        self.itemsTemp.itemsList = list!
-                                        print ("notified", self.itemsTemp.itemsList)
-                                        self.isUpload = true
-                                    }
-                                })
-                            }) {
-                                Text("Upload Photo")
-                                    .font(.headline)
+            LoadingView(isShowing: $isLoading) {
+                VStack(spacing: 32) {
+                    Spacer()
+                    if let image = viewModel.selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                        NavigationLink(destination: Names(), isActive: $isUpload) {
+                            VStack{
+                                Button(buttonText) {
+                                    self.isLoading.toggle()
+                                    viewModel.sendBase64(image: image, completion: {list in
+                                        DispatchQueue.main.async {
+                                            self.isLoading.toggle()
+                                            self.itemsTemp.itemsList = list!
+                                            print ("notified", self.itemsTemp.itemsList)
+                                            self.isUpload = true
+                                        }
+                                    })
+                                }
                             }
                         }
                     }
-                }
-                else {
-                    Text("Upload an image of a receipt")
-                }
-                Spacer()
-                VStack(spacing: 32) {
+                    else {
+                        Text("Upload an image of a receipt")
+                    }
+                    Spacer()
+                    VStack(spacing: 32) {
+                        
+                        Button(action: viewModel.choosePhoto, label: {
+                            Image(systemName: "photo")
+                                .font(.system(size: 20))
+                            Text("Choose Photo")
+                                .font(.headline)
+                        })
+                        Button(action: viewModel.takePhoto, label: {
+                            Image(systemName: "camera")
+                                .font(.system(size: 20))
+                            Text("Take a Photo")
+                                .font(.headline)
+                        })
+                    }.padding()
                     
-                    Button(action: viewModel.choosePhoto, label: {
-                        Image(systemName: "photo")
-                            .font(.system(size: 20))
-                        Text("Choose Photo")
-                            .font(.headline)
-                    })
-                    Button(action: viewModel.takePhoto, label: {
-                        Image(systemName: "camera")
-                            .font(.system(size: 20))
-                        Text("Take a Photo")
-                            .font(.headline)
-                    })
-                }.padding()
-                
-                
+                    
+                }
+                .navigationTitle("TabDrop")
+                .fullScreenCover(isPresented: $viewModel.isPresentingImagePicker, content: {
+                    ImagePicker(sourceType: viewModel.sourceType, completionHandler: viewModel.didSelectImage)
+                })
             }
-            .navigationTitle("TabDrop")
-            .fullScreenCover(isPresented: $viewModel.isPresentingImagePicker, content: {
-                ImagePicker(sourceType: viewModel.sourceType, completionHandler: viewModel.didSelectImage)
-            })
         }
         .navigationViewStyle(.stack)
         .environmentObject(persons)
@@ -72,6 +74,7 @@ struct ContentView: View {
 
     var body: some View {
         LandingPageView()
+        // LoadingView()
     }
 }
 
