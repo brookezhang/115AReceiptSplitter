@@ -22,6 +22,8 @@ struct NamesView: View{
 
 struct ItemRow: View{
     @StateObject var item: Item
+    // @State var newPrice: Double
+    
     var body: some View{
         VStack{
             HStack{
@@ -31,6 +33,16 @@ struct ItemRow: View{
             }.contentShape(Rectangle())
              .frame(height: 20)
              .padding(10)
+            
+            HStack{
+                Spacer()
+                if (!item.peopleList.isEmpty) {
+                    Text("Price per person: $\(String(format: "%.2f", (item.price / Double(item.peopleList.count))))")
+                } else {
+                    Text("Price per person: $\(String(format: "%.2f", item.price))")
+                }
+            }.padding(.trailing, 10)
+            
             ZStack(alignment: .leading){
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack(alignment: .center){
