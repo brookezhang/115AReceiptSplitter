@@ -69,18 +69,17 @@ struct ReceiptList: View {
 
     //@ObservedObject var itemsTemp = Items()
     @EnvironmentObject var itemsTemp: Items
+    @State var isCalc = false
+    
     var body: some View {
             VStack{
                 NamesView()
-                NavigationLink(destination: FinalSplit(itemls: itemsTemp)) {
-                    Text("See final split")
+                NavigationLink(destination: FinalSplit(itemls: itemsTemp), isActive: $isCalc) {
+                    Button("Calculate Final Split") {
+                        itemsTemp.makeList()
+                        isCalc = true
+                    }
                 }
-                Button(action: {
-                    itemsTemp.makeList()
-                }) {
-                    Text("Calculate")
-                }
-                
 
                 ScrollView{
                     LazyVStack(alignment: .leading, spacing: 10){
@@ -117,7 +116,7 @@ class Items: ObservableObject {
                 if !keyExists{
                     pplDict[p] = Person(name: p)
                 }
-                pplDict[p]?.totalAdd(amount: i.price)
+                pplDict[p]?.totalAdd(amount: round((i.price / Double(i.peopleList.count)) * 100) / 100)
             }
 
         }
