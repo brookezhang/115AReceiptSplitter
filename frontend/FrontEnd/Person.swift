@@ -1,19 +1,14 @@
-//
-//  Person.swift
-//  FrontEnd
-//
-//  Created by Sibbons Shrestha on 2/5/22.
-//
-
 import SwiftUI
 
 struct Person: Identifiable {
     let name: String
-    let totalOwed: Int
+    var totalOwed: Double
     let id = UUID()
-    init(name: String){
+    init(name: String, amount: Double = 0){
         self.name = name
-        self.totalOwed = 0
+        self.totalOwed = amount
+    }
+    mutating func totalAdd(amount: Double){
+        self.totalOwed += amount
     }
 }
-

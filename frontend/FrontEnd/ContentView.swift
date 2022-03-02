@@ -117,7 +117,7 @@ class ViewModel: ObservableObject {
     
     func sendBase64 (image: UIImage, completion: @escaping ([Item]?) -> Void) {
         let strBase64 = convertImageToBase64String(img: image)
-        let Url = String(format: "http://127.0.0.1:5000/get_items")
+        let Url = String(format: "https://tabdropbackend.herokuapp.com/items")
         guard let serviceUrl = URL(string: Url) else {
             completion(nil)
             return
