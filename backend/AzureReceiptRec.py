@@ -3,9 +3,7 @@ import base64
 import os
 from dotenv import load_dotenv
 from flask import Flask, request
-from azure.core.exceptions import ResourceNotFoundError
 from azure.core.credentials import AzureKeyCredential
-from azure.ai.formrecognizer import FormTrainingClient
 from azure.ai.formrecognizer import FormRecognizerClient
 
 class AzureReceipt:
@@ -62,21 +60,25 @@ class AzureReceipt:
             subtotal = receipt.fields.get('Subtotal')
             if subtotal:
                 subtotal_entry = {}
+                subtotal_entry['item_name'] = 'subtotal'
                 subtotal_entry['subtotal'] = subtotal.value
                 item_list.append(subtotal_entry)
             tax = receipt.fields.get('tax')
             if tax:
                 tax_entry = {}
+                tax_entry['item_name'] = 'subtotal'
                 tax_entry['subtotal'] = tax.value
                 item_list.append(tax_entry)
             tip = receipt.fields.get('tip')
             if tip:
                 tip_entry = {}
+                tip_entry['item_name'] = 'tip'
                 tip_entry['tip'] = tip.value
                 item_list.append(tip_entry)
             total = receipt.fields.get('total')
             if total:
                 total_entry = {}
+                total_entry['item_name'] = 'total'
                 total_entry['total'] = total.value
                 item_list.append(total_entry)
         return item_list
