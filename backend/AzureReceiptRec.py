@@ -66,7 +66,7 @@ class AzureReceipt:
             tax = receipt.fields.get('tax')
             if tax:
                 tax_entry = {}
-                tax_entry['item_name'] = 'subtotal'
+                tax_entry['item_name'] = 'tax'
                 tax_entry['price'] = tax.value
                 item_list.append(tax_entry)
             tip = receipt.fields.get('tip')
@@ -81,7 +81,7 @@ class AzureReceipt:
                 total_entry['item_name'] = 'total'
                 total_entry['price'] = total.value
                 item_list.append(total_entry)
-                
+
         return item_list
     
     # gets receipt image data and parses it 
