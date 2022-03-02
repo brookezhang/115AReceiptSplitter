@@ -81,6 +81,7 @@ class AzureReceipt:
                 total_entry['item_name'] = 'total'
                 total_entry['price'] = total.value
                 item_list.append(total_entry)
+                
         return item_list
     
     # gets receipt image data and parses it 
