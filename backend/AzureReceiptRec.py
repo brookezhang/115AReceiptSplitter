@@ -61,25 +61,25 @@ class AzureReceipt:
             if subtotal:
                 subtotal_entry = {}
                 subtotal_entry['item_name'] = 'subtotal'
-                subtotal_entry['subtotal'] = subtotal.value
+                subtotal_entry['price'] = subtotal.value
                 item_list.append(subtotal_entry)
             tax = receipt.fields.get('tax')
             if tax:
                 tax_entry = {}
                 tax_entry['item_name'] = 'subtotal'
-                tax_entry['subtotal'] = tax.value
+                tax_entry['price'] = tax.value
                 item_list.append(tax_entry)
             tip = receipt.fields.get('tip')
             if tip:
                 tip_entry = {}
                 tip_entry['item_name'] = 'tip'
-                tip_entry['tip'] = tip.value
+                tip_entry['price'] = tip.value
                 item_list.append(tip_entry)
             total = receipt.fields.get('total')
             if total:
                 total_entry = {}
                 total_entry['item_name'] = 'total'
-                total_entry['total'] = total.value
+                total_entry['price'] = total.value
                 item_list.append(total_entry)
         return item_list
     
