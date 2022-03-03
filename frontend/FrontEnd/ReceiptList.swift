@@ -111,6 +111,8 @@ class Items: ObservableObject {
     @Published var pplList = [Person]()
     
     func makeList(){
+        self.pplList = [Person]()
+
         var pplDict: [String: Person] = [:]
         self.itemsList.forEach { i in
             i.peopleList.forEach{ p in
