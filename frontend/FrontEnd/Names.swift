@@ -8,24 +8,30 @@
 import SwiftUI
 
 class People: ObservableObject {
-    @Published var nameList = [Person]()
+    @Published var nameList = [String]()
 }
 
 struct Names: View {
-    // @StateObject var persons = People()
     @EnvironmentObject var persons: People
-    @State var text: String = ""
+    @State var inputStr: String = ""
+    @State private var empty = true
+    
     var body: some View {
-        // NavigationView{
             List{
                 Section(header: Text("Enter New Name Below")){
                     HStack{
-                        TextField("Peter Parker", text: $text)
+                        TextField("Peter Parker", text: $inputStr)
                         Button(action: {
-                            if !text.isEmpty{
-                                let temp = Person(name: text)
-                                persons.nameList.insert(temp, at:0)
-                                text = ""
+                            if !inputStr.isEmpty{
+                                guard !persons.nameList.contains(inputStr) else {
+                                    inputStr = ""
+                                    return
+                                }
+                                persons.nameList.insert(inputStr, at:0)
+                                if persons.nameList.count >= 1{
+                                    empty = false
+                                }
+                                inputStr = ""
                             }
                         }, label:{
                                 Text("Add")
@@ -33,21 +39,22 @@ struct Names: View {
                     }
                 }
                 Section{
-                    ForEach(persons.nameList, id:\.id) {item in
+                    ForEach(persons.nameList, id:\.self) {name in
                         VStack(alignment: .leading){
-                            Text(item.name).font(.headline)
+                            Text(name).font(.headline)
                         }
                     }.onDelete(perform:{
                         indexSet in persons.nameList.remove(atOffsets:indexSet)
+                        if persons.nameList.count == 0{
+                            empty = true
+                        }
                     })
                 }
                 NavigationLink(destination: ReceiptList()) {
                     Text("Drop people in the next screen")
-                }
+                }.disabled(empty)
             }.navigationTitle("Add Names")
-        // }
-        // .environmentObject(persons)
-        // .navigationViewStyle(.stack)
+
     }
 
 }

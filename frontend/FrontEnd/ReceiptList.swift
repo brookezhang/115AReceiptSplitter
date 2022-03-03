@@ -12,9 +12,9 @@ struct NamesView: View{
 
     var body: some View{
         LazyVGrid(columns: columns, spacing: 10){
-            ForEach(ppl.nameList){p in
-                Text(p.name)
-                    .onDrag { NSItemProvider(object: p.name as NSString) }
+            ForEach(ppl.nameList, id:\.self){name in
+                Text(name)
+                    .onDrag { NSItemProvider(object: name as NSString) }
             }
         }
     }
@@ -86,7 +86,9 @@ struct ReceiptList: View {
                     LazyVStack(alignment: .leading, spacing: 10){
                         ForEach(itemsTemp.itemsList ){item in
                             ItemRow(item: item)
-                        }
+                        }.onDelete(perform:{
+                            indexSet in itemsTemp.itemsList.remove(atOffsets:indexSet)
+                        })
                     }.padding(20)
                 }
                 
