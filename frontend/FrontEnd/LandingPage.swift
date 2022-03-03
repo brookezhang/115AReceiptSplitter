@@ -41,7 +41,6 @@ struct LandingPageView: View {
                                     self.isLoading.toggle()
                                     viewModel.sendBase64(image: image, completion: {list, err  in
                                         DispatchQueue.main.async {
-                                            if (list == nil) { self.showAlert = true }
                                             if (err != nil) {
                                                 self.showAlert = true
                                                 print ("REPORT ERROR")
