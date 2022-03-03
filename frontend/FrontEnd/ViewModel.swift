@@ -63,7 +63,7 @@ class ViewModel: ObservableObject {
 //            if let response = response {
 //                //print(response)
 //            }
-            print ("is there an error? ", error!)
+            // print ("is there an error? ", error!)
             if let error = error {
                 print("actual error", error)
                 completion (nil, error)
