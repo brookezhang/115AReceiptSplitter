@@ -21,6 +21,7 @@ struct LandingPageView: View {
     @State var isLoading = false
     @State private var buttonText = "Upload Photo"
     @State private var showAlert = false;
+    // @State private var empty = true
     
     // EnvironmentObjects
 //    @EnvironmentObject var errorHandling: ErrorHandling
@@ -38,15 +39,17 @@ struct LandingPageView: View {
                         NavigationLink(destination: Names(), isActive: $isUpload) {
                             VStack{
                                 Button(buttonText) {
-                                    self.isLoading.toggle()
+                                    self.isLoading = true
                                     viewModel.sendBase64(image: image, completion: {list, err  in
                                         DispatchQueue.main.async {
                                             if (err != nil) {
                                                 self.showAlert = true
+                                                self.isLoading = false
+                                                self.viewModel.isEmpty = true
                                                 print ("REPORT ERROR")
                                                 return
                                             }
-                                            self.isLoading.toggle()
+                                            self.isLoading = false
                                             self.itemsTemp.itemsList = Array(list![0..<(list!.count - 3)])
                                             self.totals.totalsList = Array(list!.suffix(3))
                                             print ("uploaded and parsed")
@@ -56,10 +59,10 @@ struct LandingPageView: View {
                                 }
                                 .alert(
                                     isPresented: $showAlert,
-                                    content: { Alert(title: Text("Hello world")) }
+                                    content: { Alert(title: Text("Receipt could not be processed")) }
                                 )
                             }
-                        }
+                        }.disabled(viewModel.isEmpty)
                     }
                     else {
                         Text("Upload an image of a receipt")

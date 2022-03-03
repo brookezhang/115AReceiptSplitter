@@ -12,17 +12,20 @@ import SwiftUI
 class ViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isPresentingImagePicker = false
+    @Published var isEmpty = true
     var itemsArr = [Item]()
     private(set) var sourceType: ImagePicker.SourceType = .camera
         
     func choosePhoto() {
         sourceType = .photoLibrary
         isPresentingImagePicker = true
+        isEmpty = false
     }
     
     func takePhoto() {
         sourceType = .camera
         isPresentingImagePicker = true
+        isEmpty = false
     }
     
     func didSelectImage (image: UIImage?) {
@@ -39,6 +42,9 @@ class ViewModel: ObservableObject {
     enum Errors: Error {
         case urlInvalid
         case dataIsNil
+        case invalidImage
+        case invalidJSONData
+        case someError
     }
 
     func sendBase64 (image: UIImage, completion: @escaping ([Item]?, Error?) -> Void) {
@@ -53,20 +59,26 @@ class ViewModel: ObservableObject {
         request.httpMethod = "POST"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options: []) else {
-            completion(nil, nil)
+            completion(nil, Errors.invalidJSONData)
             return
         }
         request.httpBody = httpBody
 
         let session = URLSession.shared
-        session.dataTask(with: request) { (data, _, error) in
+        session.dataTask(with: request) { (data, response, error) in
 //            if let response = response {
-//                //print(response)
+//                print(response)
 //            }
-            // print ("is there an error? ", error!)
+            if let response = response as? HTTPURLResponse {
+                // print(response)
+                print("statusCode: \(response.statusCode)")
+                if response.statusCode >= 300 {
+                    completion(nil, Errors.someError)
+                }
+            }
             if let error = error {
                 print("actual error", error)
-                completion (nil, error)
+                completion (nil, Errors.invalidImage)
             }
             if let data = data {
                 do {
@@ -80,10 +92,10 @@ class ViewModel: ObservableObject {
                             self.itemsArr.append(full_item)
                         }
                         completion(self.itemsArr, nil)
-                    } else { completion(nil, nil) }
+                    } else { completion(nil, Errors.invalidJSONData) }
                 } catch {
-                    print("error", error)
-                    completion(nil, Errors.dataIsNil)
+                    // print("error", error)
+                    completion(nil, Errors.invalidJSONData)
                 }
             }
         }.resume()
