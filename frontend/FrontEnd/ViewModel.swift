@@ -12,12 +12,9 @@ import SwiftUI
 class ViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var isPresentingImagePicker = false
-    // @ObservedObject var itemsTemp = Items()
     var itemsArr = [Item]()
     private(set) var sourceType: ImagePicker.SourceType = .camera
-    
-    // @Published var totals = [Item]()
-    
+        
     func choosePhoto() {
         sourceType = .photoLibrary
         isPresentingImagePicker = true
@@ -39,11 +36,16 @@ class ViewModel: ObservableObject {
         return strBase64
     }
     
-    func sendBase64 (image: UIImage, completion: @escaping ([Item]?) -> Void) {
+    enum Errors: Error {
+        case urlInvalid
+        case dataIsNil
+    }
+
+    func sendBase64 (image: UIImage, completion: @escaping ([Item]?, Error?) -> Void) {
         let strBase64 = convertImageToBase64String(img: image)
         let Url = String(format: "https://tabdropbackend.herokuapp.com/items")
         guard let serviceUrl = URL(string: Url) else {
-            completion(nil)
+            completion(nil, Errors.urlInvalid)
             return
         }
         let parameterDictionary = ["base64" : strBase64]
@@ -51,7 +53,7 @@ class ViewModel: ObservableObject {
         request.httpMethod = "POST"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options: []) else {
-            completion(nil)
+            completion(nil, nil)
             return
         }
         request.httpBody = httpBody
@@ -61,6 +63,11 @@ class ViewModel: ObservableObject {
 //            if let response = response {
 //                //print(response)
 //            }
+            print ("is there an error? ", error!)
+            if let error = error {
+                print("actual error", error)
+                completion (nil, error)
+            }
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
@@ -70,19 +77,13 @@ class ViewModel: ObservableObject {
                             let item = anItem["item_name"] as! String
                             let price = anItem["price"] as! Double
                             let full_item = Item(name: item, price: price, pplList: [String]())
-//                            if (item == "Subtotal" || item == "Tax" || item == "Total") {
-//                                // print (item, price)
-//                                self.totals.append(full_item)
-//                            } else {
-//                                self.itemsArr.append(full_item)
-//                            }
                             self.itemsArr.append(full_item)
                         }
-                        // print ("dispatch", self.itemsArr)
-                        completion(self.itemsArr)
-                    } else { completion(nil) }
+                        completion(self.itemsArr, nil)
+                    } else { completion(nil, nil) }
                 } catch {
                     print("error", error)
+                    completion(nil, Errors.dataIsNil)
                 }
             }
         }.resume()
