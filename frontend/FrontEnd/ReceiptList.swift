@@ -12,9 +12,9 @@ struct NamesView: View{
 
     var body: some View{
         LazyVGrid(columns: columns, spacing: 10){
-            ForEach(ppl.nameList){p in
-                Text(p.name)
-                    .onDrag { NSItemProvider(object: p.name as NSString) }
+            ForEach(ppl.nameList, id:\.self){name in
+                Text(name)
+                    .onDrag { NSItemProvider(object: name as NSString) }
             }
         }
     }
@@ -63,21 +63,36 @@ struct ItemRow: View{
     }
 }
 
+
+
 struct ReceiptList: View {
 
     //@ObservedObject var itemsTemp = Items()
     @EnvironmentObject var itemsTemp: Items
     var body: some View {
-        VStack{
-            NamesView()
-            ScrollView{
-                LazyVStack(alignment: .leading, spacing: 10){
-                    ForEach(itemsTemp.itemsList ){item in
-                        ItemRow(item: item)
-                    }
-                }.padding(20)
-            }
-        }.navigationTitle("Drop names into items")
+            VStack{
+                NamesView()
+                NavigationLink(destination: FinalSplit(itemls: itemsTemp)) {
+                    Text("See final split")
+                }
+                Button(action: {
+                    itemsTemp.makeList()
+                }) {
+                    Text("Calculate")
+                }
+                
+
+                ScrollView{
+                    LazyVStack(alignment: .leading, spacing: 10){
+                        ForEach(itemsTemp.itemsList ){item in
+                            ItemRow(item: item)
+                        }.onDelete(perform:{
+                            indexSet in itemsTemp.itemsList.remove(atOffsets:indexSet)
+                        })
+                    }.padding(20)
+                }
+                
+            }.navigationTitle("Drop names into items")
     }
 }
 
@@ -94,6 +109,29 @@ class Items: ObservableObject {
 //        Item(name: "testing2", price: 100, pplList: [String]()),
 //    ]
     @Published var itemsList = [Item]()
+    @Published var pplList = [Person]()
+    
+    func makeList(){
+        var pplDict: [String: Person] = [:]
+        self.itemsList.forEach { i in
+            i.peopleList.forEach{ p in
+                let keyExists = pplDict[p] != nil
+                if !keyExists{
+                    pplDict[p] = Person(name: p)
+                }
+                pplDict[p]?.totalAdd(amount: i.price)
+            }
+
+        }
+        //loop through dict and add it to a list b/c swiftui can't print out dicts, sad
+        for key in pplDict.keys {
+            //print("\(key), \(String(describing: self.pplDict[key]?.totalOwed))")
+            let temp = Person(name: key, amount: Double(pplDict[key]!.totalOwed))
+            self.pplList.append(temp)
+        }
+        print("FROM CLASS FUNC \(self.pplList)")
+    }
+
 }
 
 class Totals: ObservableObject {
@@ -112,9 +150,8 @@ class Item: ObservableObject,Identifiable, DropDelegate{
         self.price = price
         self.peopleList = pplList
     }
+    
     func performDrop(info: DropInfo) -> Bool {
-        
-        
         if let item = info.itemProviders(for: ["public.text"]).first {
                   // Load the item
                   item.loadItem(forTypeIdentifier: "public.text", options: nil) { (text, err) in

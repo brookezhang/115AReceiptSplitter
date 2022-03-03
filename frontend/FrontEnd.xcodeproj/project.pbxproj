@@ -16,6 +16,7 @@
 		E973792A279E027E00753996 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9737929279E027E00753996 /* ContentView.swift */; };
 		E973792C279E027F00753996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792B279E027F00753996 /* Assets.xcassets */; };
 		E973792F279E027F00753996 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E973792E279E027F00753996 /* Preview Assets.xcassets */; };
+		E9AE09D427CFE603006CD8D9 /* FinalSplit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AE09D327CFE603006CD8D9 /* FinalSplit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		E9737929279E027E00753996 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E973792B279E027F00753996 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E973792E279E027F00753996 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E9AE09D327CFE603006CD8D9 /* FinalSplit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalSplit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				7232BDCF27A1EE73006D6291 /* ImagePicker.swift */,
 				72FBEFBF27B71F0200DC14A3 /* Person.swift */,
 				E94E6D0727C5D12F002E3CDC /* ReceiptList.swift */,
+				E9AE09D327CFE603006CD8D9 /* FinalSplit.swift */,
 			);
 			path = FrontEnd;
 			sourceTree = "<group>";
@@ -153,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72FBEFC027B71F0200DC14A3 /* Person.swift in Sources */,
+				E9AE09D427CFE603006CD8D9 /* FinalSplit.swift in Sources */,
 				7232BDD027A1EE73006D6291 /* ImagePicker.swift in Sources */,
 				E94E6D0827C5D12F002E3CDC /* ReceiptList.swift in Sources */,
 				E973792A279E027E00753996 /* ContentView.swift in Sources */,
