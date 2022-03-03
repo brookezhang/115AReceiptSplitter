@@ -20,6 +20,10 @@ struct LandingPageView: View {
     @State var temp = [Item]()
     @State var isLoading = false
     @State private var buttonText = "Upload Photo"
+    @State private var showAlert = false;
+    
+    // EnvironmentObjects
+//    @EnvironmentObject var errorHandling: ErrorHandling
     
     var body: some View {
         
@@ -35,8 +39,14 @@ struct LandingPageView: View {
                             VStack{
                                 Button(buttonText) {
                                     self.isLoading.toggle()
-                                    viewModel.sendBase64(image: image, completion: {list in
+                                    viewModel.sendBase64(image: image, completion: {list, err  in
                                         DispatchQueue.main.async {
+                                            if (list == nil) { self.showAlert = true }
+                                            if (err != nil) {
+                                                self.showAlert = true
+                                                print ("REPORT ERROR")
+                                                return
+                                            }
                                             self.isLoading.toggle()
                                             self.itemsTemp.itemsList = Array(list![0..<(list!.count - 3)])
                                             self.totals.totalsList = Array(list!.suffix(3))
@@ -45,6 +55,10 @@ struct LandingPageView: View {
                                         }
                                     })
                                 }
+                                .alert(
+                                    isPresented: $showAlert,
+                                    content: { Alert(title: Text("Hello world")) }
+                                )
                             }
                         }
                     }
