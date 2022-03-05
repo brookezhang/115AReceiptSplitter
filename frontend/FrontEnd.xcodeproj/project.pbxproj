@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7217EFAA27D313D3006E689D /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7217EFA927D313D3006E689D /* Items.swift */; };
 		7227FFE027D026BA00C9726F /* LandingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7227FFDF27D026BA00C9726F /* LandingPage.swift */; };
 		7227FFE227D026E500C9726F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7227FFE127D026E500C9726F /* ViewModel.swift */; };
 		7232BDD027A1EE73006D6291 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7232BDCF27A1EE73006D6291 /* ImagePicker.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7217EFA927D313D3006E689D /* Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
 		7227FFDF27D026BA00C9726F /* LandingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingPage.swift; sourceTree = "<group>"; };
 		7227FFE127D026E500C9726F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		7232BDCF27A1EE73006D6291 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 				E9AE09D327CFE603006CD8D9 /* FinalSplit.swift */,
 				7227FFDF27D026BA00C9726F /* LandingPage.swift */,
 				7227FFE127D026E500C9726F /* ViewModel.swift */,
+				7217EFA927D313D3006E689D /* Items.swift */,
 			);
 			path = FrontEnd;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				E9AE09D427CFE603006CD8D9 /* FinalSplit.swift in Sources */,
 				7232BDD027A1EE73006D6291 /* ImagePicker.swift in Sources */,
 				E94E6D0827C5D12F002E3CDC /* ReceiptList.swift in Sources */,
+				7217EFAA27D313D3006E689D /* Items.swift in Sources */,
 				E973792A279E027E00753996 /* ContentView.swift in Sources */,
 				72464F3627CEEA1000345A16 /* Loading.swift in Sources */,
 				72FBEFBE27B71EE300DC14A3 /* Names.swift in Sources */,

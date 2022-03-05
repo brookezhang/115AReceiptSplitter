@@ -22,7 +22,6 @@ struct NamesView: View{
 
 struct ItemRow: View{
     @StateObject var item: Item
-    // @State var newPrice: Double
     
     var body: some View{
         VStack{
@@ -63,35 +62,77 @@ struct ItemRow: View{
     }
 }
 
-
+struct NewItem: View {
+    @EnvironmentObject var itemsTemp: Items
+    @State private var name: String = ""
+    @State private var priceStr: String = ""
+    @State private var isAdded = false
+    
+    var body: some View {
+        VStack {
+            List {
+                Section(header: Text("Enter New Item")){
+                    HStack{
+                        TextField("New Item", text: $name)
+                    }
+                }
+                Section(header: Text("Enter Item Price")){
+                    HStack{
+                        TextField("Item Price", text: $priceStr)
+                    }
+                }
+                NavigationLink(destination: ReceiptList(), isActive: $isAdded) {
+                    Text("Add Item")
+                        .onTapGesture {
+                            itemsTemp.addItem(name: name, price: Double(priceStr)!)
+//                            itemsTemp.printItems()
+                            isAdded = true
+                        }
+                }
+            }
+        }
+        .navigationTitle("Add New Item")
+    }
+}
 
 struct ReceiptList: View {
 
     //@ObservedObject var itemsTemp = Items()
     @EnvironmentObject var itemsTemp: Items
-    @State var isCalc = false
+    @State private var isCalc = false
+    @State private var isAdd = false
     
     var body: some View {
-            VStack{
-                NamesView()
-                NavigationLink(destination: FinalSplit(itemls: itemsTemp), isActive: $isCalc) {
-                    Button("Calculate Final Split") {
-                        itemsTemp.makeList()
-                        isCalc = true
+        VStack {
+            NamesView()
+            NavigationLink(destination: FinalSplit(itemls: itemsTemp), isActive: $isCalc) {
+                Button("Calculate Final Split") {
+                    itemsTemp.makeList()
+                    isCalc = true
+                }.font(.headline)
+                    
+            }
+            List {
+                Section {
+                    ForEach (itemsTemp.itemsList) {item in
+                        ItemRow(item: item)
                     }
+                    .onDelete(perform: {
+                        indexSet in itemsTemp.itemsList.remove(atOffsets:indexSet)
+                    })
                 }
-
-                ScrollView{
-                    LazyVStack(alignment: .leading, spacing: 10){
-                        ForEach(itemsTemp.itemsList ){item in
-                            ItemRow(item: item)
-                        }.onDelete(perform:{
-                            indexSet in itemsTemp.itemsList.remove(atOffsets:indexSet)
-                        })
-                    }.padding(20)
-                }
-                
-            }.navigationTitle("Drop names into items")
+            }
+            .listStyle(PlainListStyle())
+        }
+        .navigationTitle("Drop names into items")
+        .navigationBarItems(trailing: NavigationLink(destination: NewItem(), isActive: $isAdd) {addItemButton})
+    }
+    
+    var addItemButton: some View {
+        Button(action: {
+//            self.itemsTemp.printItems()
+            self.isAdd = true
+        }) { Image(systemName: "plus") }
     }
 }
 
@@ -99,82 +140,4 @@ struct ReceiptList_Previews: PreviewProvider {
     static var previews: some View {
         ReceiptList()
     }
-}
-
-class Items: ObservableObject {
-//    let id = UUID()
-//    @Published var itemsList: [Item] = [
-//        Item(name: "testing1", price: 200, pplList: [String]()),
-//        Item(name: "testing2", price: 100, pplList: [String]()),
-//    ]
-    @Published var itemsList = [Item]()
-    @Published var pplList = [Person]()
-    
-    func makeList(){
-        self.pplList = [Person]()
-
-        var pplDict: [String: Person] = [:]
-        self.itemsList.forEach { i in
-            i.peopleList.forEach{ p in
-                let keyExists = pplDict[p] != nil
-                if !keyExists{
-                    pplDict[p] = Person(name: p)
-                }
-                pplDict[p]?.totalAdd(amount: round((i.price / Double(i.peopleList.count)) * 100) / 100)
-            }
-
-        }
-        //loop through dict and add it to a list b/c swiftui can't print out dicts, sad
-        for key in pplDict.keys {
-            //print("\(key), \(String(describing: self.pplDict[key]?.totalOwed))")
-            let temp = Person(name: key, amount: Double(pplDict[key]!.totalOwed))
-            self.pplList.append(temp)
-        }
-        print("FROM CLASS FUNC \(self.pplList)")
-    }
-
-}
-
-class Totals: ObservableObject {
-    @Published var totalsList = [Item]()
-}
-
-class Item: ObservableObject,Identifiable, DropDelegate{
-    let id = UUID()
-    
-    @Published var name: String
-    @Published var price: Double
-    @Published var peopleList: [String]
-    
-    init(name: String, price: Double, pplList: [String]) {
-        self.name = name
-        self.price = price
-        self.peopleList = pplList
-    }
-    
-    func performDrop(info: DropInfo) -> Bool {
-        if let item = info.itemProviders(for: ["public.text"]).first {
-                  // Load the item
-                  item.loadItem(forTypeIdentifier: "public.text", options: nil) { (text, err) in
-                      // Cast NSSecureCoding to Ddata
-                      if let data = text as? Data {
-                          // Extract string from data
-                          let inputStr = String(decoding: data, as: UTF8.self)
-
-                              guard !self.peopleList.contains(inputStr) else {
-                              return
-                          }
-                          
-                          DispatchQueue.main.async {
-                              self.peopleList.append(inputStr)
-                              print(self.name, self.peopleList)
-                          }
-                      }
-                  }
-              } else {
-                  return false
-              }
-            return true
-    }
-
 }

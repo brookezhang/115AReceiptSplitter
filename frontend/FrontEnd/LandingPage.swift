@@ -12,7 +12,6 @@ struct LandingPageView: View {
     @StateObject var viewModel = ViewModel()
     @StateObject var persons = People()
     @StateObject var itemsTemp = Items()
-    @StateObject var totals = Totals()
     
     // States
     @State var uploadImage = false
@@ -21,6 +20,8 @@ struct LandingPageView: View {
     @State var isLoading = false
     @State private var buttonText = "Upload Photo"
     @State private var showAlert = false;
+    @State private var alertMsg = "Receipt could not be processed";
+    // @State private var showImageAlert = false;
     // @State private var empty = true
     
     // EnvironmentObjects
@@ -43,23 +44,31 @@ struct LandingPageView: View {
                                     viewModel.sendBase64(image: image, completion: {list, err  in
                                         DispatchQueue.main.async {
                                             if (err != nil) {
-                                                self.showAlert = true
+                                                print ("err", "\(err!)")
+                                                if ("\(err!)" == "invalidJSONData") {
+                                                    self.alertMsg = "Server error"
+                                                }
+                                                else if ("\(err!)" == "invalidImage"){
+                                                    self.alertMsg = "Image not of receipt"
+                                                }
                                                 self.isLoading = false
+                                                self.showAlert = true
                                                 self.viewModel.isEmpty = true
                                                 print ("REPORT ERROR")
                                                 return
                                             }
                                             self.isLoading = false
-                                            self.itemsTemp.itemsList = Array(list![0..<(list!.count - 3)])
-                                            self.totals.totalsList = Array(list!.suffix(3))
+                                            self.itemsTemp.itemsList = Array(list![0..<(list!.count - 1)])
+                                            self.itemsTemp.subtotal = Array(list!.suffix(1))[0].price
                                             print ("uploaded and parsed")
                                             self.isUpload = true
                                         }
                                     })
                                 }
+                                .font(.headline)
                                 .alert(
                                     isPresented: $showAlert,
-                                    content: { Alert(title: Text("Receipt could not be processed")) }
+                                    content: { Alert(title: Text(alertMsg)) }
                                 )
                             }
                         }.disabled(viewModel.isEmpty)
@@ -95,6 +104,5 @@ struct LandingPageView: View {
         .navigationViewStyle(.stack)
         .environmentObject(persons)
         .environmentObject(itemsTemp)
-        .environmentObject(totals)
     }
 }
