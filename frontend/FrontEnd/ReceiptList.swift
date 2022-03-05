@@ -71,10 +71,6 @@ struct ReceiptList: View {
     @EnvironmentObject var itemsTemp: Items
     @State var isCalc = false
     
-    func deleteRow (at offsets: Int) {
-        print (itemsTemp.itemsList[offsets].name)
-        itemsTemp.itemsList.remove(at: offsets)
-    }
     var body: some View {
         VStack {
             NamesView()
