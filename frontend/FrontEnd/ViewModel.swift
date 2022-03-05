@@ -69,32 +69,45 @@ class ViewModel: ObservableObject {
 //            if let response = response {
 //                print(response)
 //            }
+            if let error = error {
+                print("actual error", error)
+                completion (nil, Errors.someError)
+                return
+            }
             if let response = response as? HTTPURLResponse {
                 // print(response)
                 print("statusCode: \(response.statusCode)")
+                if response.statusCode == 503 || response.statusCode == 400 {
+                    completion(nil, Errors.invalidImage)
+                    return
+                }
                 if response.statusCode >= 300 {
                     completion(nil, Errors.someError)
+                    return
                 }
-            }
-            if let error = error {
-                print("actual error", error)
-                completion (nil, Errors.invalidImage)
             }
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
                     if let object = json as? [Any] {
+                        
                         self.itemsArr = []
                         for anItem in object as! [Dictionary<String, AnyObject>] {
-                            let item = anItem["item_name"] as! String
-                            let price = anItem["price"] as! Double
+                            guard let item = anItem["item_name"] as? String else {
+                                completion(nil, Errors.invalidJSONData)
+                                return
+                            }
+                            guard let price = anItem["price"] as? Double else {
+                                completion(nil, Errors.invalidJSONData)
+                                return
+                            }
                             let full_item = Item(name: item, price: price, pplList: [String]())
                             self.itemsArr.append(full_item)
                         }
                         completion(self.itemsArr, nil)
-                    } else { completion(nil, Errors.invalidJSONData) }
+                    } else { completion(nil, Errors.invalidImage) }
                 } catch {
-                    // print("error", error)
+                    print("error in the catch", error)
                     completion(nil, Errors.invalidJSONData)
                 }
             }
