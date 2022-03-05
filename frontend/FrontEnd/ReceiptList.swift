@@ -22,7 +22,6 @@ struct NamesView: View{
 
 struct ItemRow: View{
     @StateObject var item: Item
-    // @State var newPrice: Double
     
     var body: some View{
         VStack{
@@ -63,13 +62,45 @@ struct ItemRow: View{
     }
 }
 
-
+struct NewItem: View {
+    @EnvironmentObject var itemsTemp: Items
+    @State private var name: String = ""
+    @State private var priceStr: String = ""
+    @State private var isAdded = false
+    
+    var body: some View {
+        VStack {
+            List {
+                Section(header: Text("Enter New Item")){
+                    HStack{
+                        TextField("New Item", text: $name)
+                    }
+                }
+                Section(header: Text("Enter Item Price")){
+                    HStack{
+                        TextField("Item Price", text: $priceStr)
+                    }
+                }
+                NavigationLink(destination: ReceiptList(), isActive: $isAdded) {
+                    Text("Add Item")
+                        .onTapGesture {
+                            itemsTemp.addItem(name: name, price: Double(priceStr)!)
+//                            itemsTemp.printItems()
+                            isAdded = true
+                        }
+                }
+            }
+        }
+        .navigationTitle("Add New Item")
+    }
+}
 
 struct ReceiptList: View {
 
     //@ObservedObject var itemsTemp = Items()
     @EnvironmentObject var itemsTemp: Items
-    @State var isCalc = false
+    @State private var isCalc = false
+    @State private var isAdd = false
     
     var body: some View {
         VStack {
@@ -78,7 +109,8 @@ struct ReceiptList: View {
                 Button("Calculate Final Split") {
                     itemsTemp.makeList()
                     isCalc = true
-                }
+                }.font(.headline)
+                    
             }
             List {
                 Section {
@@ -90,7 +122,17 @@ struct ReceiptList: View {
                     })
                 }
             }
-        }.navigationTitle("Drop names into items")
+            .listStyle(PlainListStyle())
+        }
+        .navigationTitle("Drop names into items")
+        .navigationBarItems(trailing: NavigationLink(destination: NewItem(), isActive: $isAdd) {addItemButton})
+    }
+    
+    var addItemButton: some View {
+        Button(action: {
+//            self.itemsTemp.printItems()
+            self.isAdd = true
+        }) { Image(systemName: "plus") }
     }
 }
 

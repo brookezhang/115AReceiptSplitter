@@ -41,6 +41,12 @@ class Items: ObservableObject {
         print("FROM CLASS FUNC \(self.pplList)")
     }
     
+    func addItem(name: String, price: Double) {
+        let newItem = Item(name: name, price: price, pplList: [String]())
+        self.itemsList.append(newItem)
+        self.subtotal += price
+    }
+    
     func printItems() {
         self.itemsList.forEach { i in
             print (i.name)

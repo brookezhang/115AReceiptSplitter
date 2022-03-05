@@ -65,6 +65,7 @@ struct LandingPageView: View {
                                         }
                                     })
                                 }
+                                .font(.headline)
                                 .alert(
                                     isPresented: $showAlert,
                                     content: { Alert(title: Text(alertMsg)) }
