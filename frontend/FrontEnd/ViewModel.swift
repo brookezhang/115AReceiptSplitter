@@ -77,7 +77,7 @@ class ViewModel: ObservableObject {
             if let response = response as? HTTPURLResponse {
                 // print(response)
                 print("statusCode: \(response.statusCode)")
-                if response.statusCode == 503 || response.statusCode == 400 {
+                if response.statusCode == 400 {
                     completion(nil, Errors.invalidImage)
                     return
                 }
@@ -108,7 +108,7 @@ class ViewModel: ObservableObject {
                     } else { completion(nil, Errors.invalidImage) }
                 } catch {
                     print("error in the catch", error)
-                    completion(nil, Errors.invalidJSONData)
+                    completion(nil, Errors.someError)
                 }
             }
         }.resume()
