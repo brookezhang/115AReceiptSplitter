@@ -11,18 +11,87 @@ class SplitTotals: ObservableObject{
     @Published var pplDict: [String: Person] = [:]
 }
 
+struct RowNames: View{
+    var body: some View{
+        VStack(alignment: .leading, spacing: 15){
+            Text("Subtotal: ")
+            Text("Tax: ")
+            Text("Tip: ")
+            Text("Total: ").bold()
+        }
+    }
+}
+
+struct DollarSigns: View{
+    var body: some View{
+        VStack(alignment: .leading, spacing: 15){
+            Text("$")
+            Text("$")
+            Text("$")
+            Text("$")
+        }
+    }
+}
+
 struct FinalSplit: View {
     @StateObject var itemls: Items
-    
-    var body: some View {
-        LazyVStack(alignment: .leading, spacing: 10){
-            ForEach(itemls.pplList){p in
-                HStack{
-                    Text("\(p.name)")
-                    Text("Total Owed: $\(String(format: "%.2f", p.totalOwed))")
+    @State private var taxPercent = ""
+    @State private var tipPercent = ""
 
+    var body: some View {
+        let totalTax = itemls.subtotal * Double(convertToDouble(text: taxPercent)/100)
+        let totalTip =  itemls.subtotal * Double(convertToDouble(text: tipPercent)/100)
+        VStack{
+            HStack{
+                Spacer()
+                VStack{
+                    HStack{
+                        Text("Tax Percent")
+                        TextField("Enter here", text: $taxPercent).keyboardType(.decimalPad)
+                    }
+                    HStack{
+                        Text("Tip Percent")
+                        TextField("Enter here", text: $tipPercent).keyboardType(.decimalPad)
+                    }
+                }
+                Spacer()
+                HStack(spacing: 10){
+                    RowNames()
+                    DollarSigns()
+                    VStack(alignment: .leading, spacing: 15){
+                        Text("\(String(format: "%.2f", itemls.subtotal))")
+                        Text("\(String(format: "%.2f", totalTax))")
+                        Text("\(String(format: "%.2f", totalTip))")
+                        Text("\(String(format: "%.2f", itemls.subtotal + totalTax + totalTip))").bold()
+                    }
+                }
+                Spacer()
+            }
+            List {
+                Section {
+                    ForEach(itemls.pplList){p in
+                        let taxOwed = p.totalOwed * Double(convertToDouble(text: taxPercent)/100)
+                        let tipOwed =  p.totalOwed * Double(convertToDouble(text: tipPercent)/100)
+                        HStack{
+                            Text("\(p.name)").font(.largeTitle)
+                            Spacer()
+                            HStack(spacing: 10){
+                                RowNames()
+                                DollarSigns()
+                                VStack(alignment: .leading, spacing: 15){
+                                    Text("\(String(format: "%.2f", p.totalOwed))")
+                                    Text("\(String(format: "%.2f", taxOwed))")
+                                    Text("\(String(format: "%.2f", tipOwed))")
+                                    Text("\(String(format: "%.2f", p.totalOwed + taxOwed + tipOwed))").bold()
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }.padding(20)
+        }
+    }
+    func convertToDouble(text: String?) -> Double {
+        return Double(text ?? "0") ?? 0.0
     }
 }
