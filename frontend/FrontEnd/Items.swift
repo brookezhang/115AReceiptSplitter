@@ -17,12 +17,16 @@ class Items: ObservableObject {
     @Published var itemsList = [Item]()
     @Published var pplList = [Person]()
     @Published var subtotal: Double = 0.0
+    @Published var countItems: Int = 0
     
     func makeList(){
         self.pplList = [Person]()
 
         var pplDict: [String: Person] = [:]
         self.itemsList.forEach { i in
+            if (!i.peopleList.isEmpty) {
+                countItems += 1
+            }
             i.peopleList.forEach{ p in
                 let keyExists = pplDict[p] != nil
                 if !keyExists{

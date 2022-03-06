@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Combine
 class SplitTotals: ObservableObject{
     @Published var pplDict: [String: Person] = [:]
 }
@@ -37,7 +37,11 @@ struct FinalSplit: View {
     @StateObject var itemls: Items
     @State private var taxPercent = ""
     @State private var tipPercent = ""
-
+    private enum Field: Int, CaseIterable {
+        case amount
+        case str
+    }
+    @FocusState private var focusedField: Field?
     var body: some View {
         let totalTax = itemls.subtotal * Double(convertToDouble(text: taxPercent)/100)
         let totalTip =  itemls.subtotal * Double(convertToDouble(text: tipPercent)/100)
@@ -48,10 +52,31 @@ struct FinalSplit: View {
                     HStack{
                         Text("Tax Percent")
                         TextField("Enter here", text: $taxPercent).keyboardType(.decimalPad)
+                            .onReceive(Just(taxPercent)) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                if filtered != newValue {
+                                    self.taxPercent = filtered
+                                }
+                            }
+                            .focused($focusedField, equals: .amount)
+                            .toolbar {
+                                ToolbarItem(placement: .keyboard) {
+                                    Button("Done") {
+                                        focusedField = nil
+                                    }
+                                }
+                            }
                     }
                     HStack{
                         Text("Tip Percent")
                         TextField("Enter here", text: $tipPercent).keyboardType(.decimalPad)
+                            .onReceive(Just(tipPercent)) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                if filtered != newValue {
+                                    self.tipPercent = filtered
+                                }
+                            }
+                            .focused($focusedField, equals: .amount)
                     }
                 }
                 Spacer()
@@ -66,6 +91,7 @@ struct FinalSplit: View {
                     }
                 }
                 Spacer()
+                
             }
             List {
                 Section {
@@ -89,7 +115,9 @@ struct FinalSplit: View {
                     }
                 }
             }
+            // .listStyle(InsetListStyle())
         }
+        .navigationTitle("Breakdown")
     }
     func convertToDouble(text: String?) -> Double {
         return Double(text ?? "0") ?? 0.0
