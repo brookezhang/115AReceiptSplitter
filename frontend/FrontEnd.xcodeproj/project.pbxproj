@@ -69,17 +69,17 @@
 		E9737926279E027E00753996 /* FrontEnd */ = {
 			isa = PBXGroup;
 			children = (
-				72464F3527CEEA0F00345A16 /* Loading.swift */,
 				E9737927279E027E00753996 /* FrontEndApp.swift */,
 				E9737929279E027E00753996 /* ContentView.swift */,
+				7227FFDF27D026BA00C9726F /* LandingPage.swift */,
 				72FBEFBD27B71EE300DC14A3 /* Names.swift */,
+				E94E6D0727C5D12F002E3CDC /* ReceiptList.swift */,
+				E9AE09D327CFE603006CD8D9 /* FinalSplit.swift */,
 				E973792B279E027F00753996 /* Assets.xcassets */,
 				E973792D279E027F00753996 /* Preview Content */,
 				7232BDCF27A1EE73006D6291 /* ImagePicker.swift */,
+				72464F3527CEEA0F00345A16 /* Loading.swift */,
 				72FBEFBF27B71F0200DC14A3 /* Person.swift */,
-				E94E6D0727C5D12F002E3CDC /* ReceiptList.swift */,
-				E9AE09D327CFE603006CD8D9 /* FinalSplit.swift */,
-				7227FFDF27D026BA00C9726F /* LandingPage.swift */,
 				7227FFE127D026E500C9726F /* ViewModel.swift */,
 				7217EFA927D313D3006E689D /* Items.swift */,
 			);

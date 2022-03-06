@@ -34,8 +34,13 @@ struct ItemRow: View{
              .padding(10)
             
             HStack{
-                Spacer()
                 if (!item.peopleList.isEmpty) {
+                    Button(action: {
+                        item.peopleList = [String]()
+                    }) {
+                        Text("  Reset")
+                    }
+                    Spacer()
                     Text("Price per person: $\(String(format: "%.2f", (item.price / Double(item.peopleList.count))))")
                 }
 //                else {
@@ -67,7 +72,8 @@ struct NewItem: View {
     @State private var name: String = ""
     @State private var priceStr: String = ""
     @State private var isAdded = false
-    
+    @State private var showingAlert = false
+
     var body: some View {
         VStack {
             List {
@@ -81,14 +87,16 @@ struct NewItem: View {
                         TextField("Item Price", text: $priceStr)
                     }
                 }
-                NavigationLink(destination: ReceiptList(), isActive: $isAdded) {
-                    Text("Add Item")
-                        .onTapGesture {
-                            itemsTemp.addItem(name: name, price: Double(priceStr)!)
-//                            itemsTemp.printItems()
-                            isAdded = true
-                        }
+                Button("Add item") {
+                    showingAlert = true
+                    itemsTemp.addItem(name: name, price: Double(priceStr)!)
+                    name = ""
+                    priceStr = ""
                 }
+                .alert("Item is added!", isPresented: $showingAlert) {
+                    Button("Ok", role: .cancel) { }
+                }
+                
             }
         }
         .navigationTitle("Add New Item")

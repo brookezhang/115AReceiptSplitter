@@ -23,11 +23,13 @@ struct Names: View {
                         TextField("Peter Parker", text: $inputStr)
                         Button(action: {
                             if !inputStr.isEmpty{
-                                guard !persons.nameList.contains(inputStr) else {
+                                let inputStrTrimmed = inputStr.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                                guard !persons.nameList.contains(inputStrTrimmed) else {
                                     inputStr = ""
                                     return
                                 }
-                                persons.nameList.insert(inputStr, at:0)
+                                persons.nameList.insert(inputStrTrimmed, at:0)
                                 if persons.nameList.count >= 1{
                                     empty = false
                                 }
