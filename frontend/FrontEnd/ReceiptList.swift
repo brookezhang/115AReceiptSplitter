@@ -38,14 +38,13 @@ struct ItemRow: View{
                     Button(action: {
                         item.peopleList = [String]()
                     }) {
-                        Text("  Reset")
+                        Text("Reset")
+                            .padding(.leading, 10)
+                            .foregroundColor(Color.red)
                     }
                     Spacer()
                     Text("Price per person: $\(String(format: "%.2f", (item.price / Double(item.peopleList.count))))")
                 }
-//                else {
-//                    Text("Price per person: $\(String(format: "%.2f", item.price))")
-//                }
             }.padding(.trailing, 10)
                 .frame(height: 10)
             
@@ -54,9 +53,10 @@ struct ItemRow: View{
                     HStack(alignment: .center){
                         Text("Paid by: ")
                         ForEach(item.peopleList, id: \.self ){name in
-                                Text(name)
+                            Text(name)
                         }
                         Spacer(minLength: 0)
+                        
                     }.contentShape(Rectangle())
                     .frame(height: 20)
                 }
@@ -109,6 +109,7 @@ struct ReceiptList: View {
     @EnvironmentObject var itemsTemp: Items
     @State private var isCalc = false
     @State private var isAdd = false
+    @State private var showAlert = false
     
     var body: some View {
         VStack {
@@ -116,8 +117,18 @@ struct ReceiptList: View {
             NavigationLink(destination: FinalSplit(itemls: itemsTemp), isActive: $isCalc) {
                 Button("Calculate Final Split") {
                     itemsTemp.makeList()
-                    isCalc = true
-                }.font(.headline)
+                    if itemsTemp.countItems == itemsTemp.itemsList.count {
+                        isCalc = true
+                    } else {
+                        showAlert = true
+                    }
+                    itemsTemp.countItems = 0
+                }
+                .font(.headline)
+                .alert(
+                    isPresented: $showAlert,
+                    content: { Alert(title: Text("Each item must be selected")) }
+                )
                     
             }
             List {
@@ -125,8 +136,10 @@ struct ReceiptList: View {
                     ForEach (itemsTemp.itemsList) {item in
                         ItemRow(item: item)
                     }
-                    .onDelete(perform: {
-                        indexSet in itemsTemp.itemsList.remove(atOffsets:indexSet)
+                    .onDelete(perform: { indexSet in
+                        let deletePrice = indexSet.map {itemsTemp.itemsList[$0].price}
+                        itemsTemp.subtotal -= deletePrice[0]
+                        itemsTemp.itemsList.remove(atOffsets:indexSet)
                     })
                 }
             }

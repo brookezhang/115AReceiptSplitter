@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Combine
 class SplitTotals: ObservableObject{
     @Published var pplDict: [String: Person] = [:]
 }
@@ -48,10 +48,22 @@ struct FinalSplit: View {
                     HStack{
                         Text("Tax Percent")
                         TextField("Enter here", text: $taxPercent).keyboardType(.decimalPad)
+                            .onReceive(Just(taxPercent)) { newValue in
+                                let filtered = newValue.filter { "0123456789".contains($0) }
+                                if filtered != newValue {
+                                    self.taxPercent = filtered
+                                }
+                            }
                     }
                     HStack{
                         Text("Tip Percent")
                         TextField("Enter here", text: $tipPercent).keyboardType(.decimalPad)
+                            .onReceive(Just(tipPercent)) { newValue in
+                                let filtered = newValue.filter { "0123456789".contains($0) }
+                                if filtered != newValue {
+                                    self.tipPercent = filtered
+                                }
+                            }
                     }
                 }
                 Spacer()
@@ -64,8 +76,10 @@ struct FinalSplit: View {
                         Text("\(String(format: "%.2f", totalTip))")
                         Text("\(String(format: "%.2f", itemls.subtotal + totalTax + totalTip))").bold()
                     }
+                    .padding(.trailing, 30)
                 }
                 Spacer()
+                
             }
             List {
                 Section {
@@ -89,7 +103,9 @@ struct FinalSplit: View {
                     }
                 }
             }
+            // .listStyle(InsetListStyle())
         }
+        .navigationTitle("Breakdown")
     }
     func convertToDouble(text: String?) -> Double {
         return Double(text ?? "0") ?? 0.0
