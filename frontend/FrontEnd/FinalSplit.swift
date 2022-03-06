@@ -76,7 +76,6 @@ struct FinalSplit: View {
                         Text("\(String(format: "%.2f", totalTip))")
                         Text("\(String(format: "%.2f", itemls.subtotal + totalTax + totalTip))").bold()
                     }
-                    .padding(.trailing, 30)
                 }
                 Spacer()
                 
