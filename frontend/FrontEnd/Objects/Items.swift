@@ -9,11 +9,6 @@ import Foundation
 import SwiftUI
 
 class Items: ObservableObject {
-//    let id = UUID()
-//    @Published var itemsList: [Item] = [
-//        Item(name: "testing1", price: 200, pplList: [String]()),
-//        Item(name: "testing2", price: 100, pplList: [String]()),
-//    ]
     @Published var itemsList = [Item]()
     @Published var pplList = [Person]()
     @Published var subtotal: Double = 0.0
