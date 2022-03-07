@@ -21,11 +21,7 @@ struct LandingPageView: View {
     @State private var buttonText = "Upload Photo"
     @State private var showAlert = false;
     @State private var alertMsg = "Receipt could not be processed";
-    // @State private var showImageAlert = false;
-    // @State private var empty = true
-    
-    // EnvironmentObjects
-//    @EnvironmentObject var errorHandling: ErrorHandling
+
     
     var body: some View {
         

@@ -7,9 +7,6 @@
 
 import SwiftUI
 import Combine
-class SplitTotals: ObservableObject{
-    @Published var pplDict: [String: Person] = [:]
-}
 
 struct RowNames: View{
     var body: some View{
