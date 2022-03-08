@@ -20,7 +20,8 @@ struct LandingPageView: View {
     @State var isLoading = false
     @State private var buttonText = "Upload Photo"
     @State private var showAlert = false;
-    @State private var alertMsg = "Receipt could not be processed";
+    @State private var alertMsg = "Receipt could not be processed"
+    @State private var disabled = true
 
     
     var body: some View {
@@ -42,7 +43,7 @@ struct LandingPageView: View {
                                             if (err != nil) {
                                                 print ("err", "\(err!)")
                                                 if ("\(err!)" == "invalidJSONData") {
-                                                    self.alertMsg = "Server error"
+                                                    self.alertMsg = "Server parsing error"
                                                 }
                                                 else if ("\(err!)" == "invalidImage"){
                                                     self.alertMsg = "Image not of receipt"
@@ -86,7 +87,7 @@ struct LandingPageView: View {
                                 .font(.system(size: 20))
                             Text("Take a Photo")
                                 .font(.headline)
-                        })
+                        }).disabled(disabled)
                     }.padding()
                     
                     
